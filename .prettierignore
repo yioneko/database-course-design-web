@@ -1,0 +1,12 @@
+/node_modules
+
+/coverage
+
+/.next/
+/out/
+
+/build
+/public/mockServiceWorker.js
+
+pnpm-lock.yaml
+
