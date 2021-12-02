@@ -1,12 +1,38 @@
 import { rest } from "msw";
+import { format } from "date-fns";
 import {
   AddCommentRequest,
+  BookAddRequest,
+  BorrowRequest,
   LoginRequest,
+  MetaData,
   ModifyUserRequest,
+  NotificationDetails,
+  ReturnRequest,
+  SendNotificationRequest,
 } from "../api/types";
-import { books, borrowed, comments, users, notifications } from "./data";
+import { books, transactions, comments, users, notifications } from "./data";
 
 export const handlers = [
+  rest.get<{}, MetaData>("/api/meta", (_, res, ctx) => {
+    return res(
+      ctx.json({
+        books: {
+          total: books.length * 3,
+          pages: 5,
+        },
+        users: {
+          total: Object.keys(users).length,
+          pages: 5,
+        },
+        transactions: {
+          total: transactions.length,
+          pages: 5,
+        },
+      })
+    );
+  }),
+
   rest.get("/api/notifications", (req, res, ctx) => {
     const userId = parseInt(req.url.searchParams.get("userId") ?? "a");
     const maybeUser = isNaN(userId)
@@ -27,6 +53,34 @@ export const handlers = [
     }
   }),
 
+  rest.post<SendNotificationRequest>("/api/notifications", (req, res, ctx) => {
+    const notification = { ...req.body };
+    const maybeReceiver = Object.values(users).find(
+      (info) => info.userId === notification.receiverId
+    );
+    const maybeSender = Object.values(users).find(
+      (info) => info.userId === notification.senderId
+    );
+    if (!maybeReceiver || !maybeSender) {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          error: "User not found",
+        })
+      );
+    } else {
+      notifications.push({
+        id: notifications.length,
+        sender: maybeSender.name,
+        receiver: maybeReceiver.name,
+        date: format(new Date(), "yyyy-MM-dd"),
+        content: notification.content,
+        isRead: false,
+      });
+      return res(ctx.status(200));
+    }
+  }),
+
   rest.post("/api/notifications/:id", (req, res, ctx) => {
     const { id } = req.params;
     Object.assign(
@@ -41,7 +95,7 @@ export const handlers = [
     const { userId } = req.params;
     return res(
       ctx.status(200),
-      ctx.json(borrowed.filter((v) => v.userId + "" === userId))
+      ctx.json(transactions.filter((v) => v.userId + "" === userId))
     );
   }),
 
@@ -95,6 +149,10 @@ export const handlers = [
     }
   }),
 
+  rest.get("/api/user", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(Object.values(users)));
+  }),
+
   rest.post<LoginRequest>("/api/login", (req, res, ctx) => {
     const { userId, password } = req.body;
     const maybeUser = Object.values(users).find(
@@ -142,7 +200,8 @@ export const handlers = [
     const maybeBook = books.find((book) => book.isbn === isbn);
     const maybeBorrowed = isNaN(userId)
       ? undefined
-      : borrowed.findIndex((v) => v.userId === userId && v.isbn === isbn) >= 0;
+      : transactions.findIndex((v) => v.userId === userId && v.isbn === isbn) >=
+        0;
 
     if (maybeBook) {
       return res(
@@ -178,5 +237,122 @@ export const handlers = [
             }
       )
     );
+  }),
+
+  rest.post<BookAddRequest>("/api/books", (req, res, ctx) => {
+    const { isbn, title, author } = req.body;
+
+    const maybeBook = books.find((book) => book.isbn === isbn);
+    if (maybeBook) {
+      maybeBook.available += 1;
+    } else if (title === undefined || author === undefined) {
+      return res(
+        ctx.status(400),
+        ctx.json({
+          error: "Title and author are required",
+        })
+      );
+    } else {
+      books.push({
+        isbn,
+        title,
+        author,
+        available: 1,
+      });
+    }
+    return res(ctx.status(200));
+  }),
+
+  rest.get("/api/transactions", (req, res, ctx) => {
+    const page = parseInt(req.url.searchParams.get("page") ?? "0");
+    // const filter = req.url.searchParams.get("filter") ?? "";
+
+    return res(ctx.status(200), ctx.json(transactions));
+  }),
+
+  rest.post<BorrowRequest>("/api/borrow", (req, res, ctx) => {
+    const { userId, isbn } = req.body;
+
+    const maybeUser = Object.values(users).find(
+      (info) => info.userId === userId
+    );
+    const maybeBook = books.find((book) => book.isbn === isbn);
+
+    if (!maybeUser) {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          error: "User not found",
+        })
+      );
+    } else if (!maybeBook) {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          error: "Book not found",
+        })
+      );
+    } else if (maybeBook.available <= 0) {
+      return res(
+        ctx.status(400),
+        ctx.json({
+          error: "Book is not available",
+        })
+      );
+    } else {
+      transactions.push({
+        userId,
+        ...maybeBook,
+        date: format(new Date(), "yyyy-MM-dd"),
+        dueDate: req.body.dueDate,
+        fine: 0,
+      });
+      maybeBook.available -= 1;
+      return res(ctx.status(200));
+    }
+  }),
+
+  rest.post<ReturnRequest>("/api/return", (req, res, ctx) => {
+    const { userId, isbn } = req.body;
+
+    const maybeUser = Object.values(users).find(
+      (info) => info.userId === userId
+    );
+    const maybeBook = books.find((book) => book.isbn === isbn);
+
+    if (!maybeUser) {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          error: "User not found",
+        })
+      );
+    } else if (!maybeBook) {
+      return res(
+        ctx.status(404),
+        ctx.json({
+          error: "Book not found",
+        })
+      );
+    } else {
+      const maybeTransaction = transactions.find(
+        (transaction) =>
+          transaction.userId === userId &&
+          transaction.isbn === isbn &&
+          transaction.returnDate === undefined
+      );
+      if (!maybeTransaction) {
+        return res(
+          ctx.status(404),
+          ctx.json({
+            error: "Book is not borrowed",
+          })
+        );
+      } else {
+        maybeTransaction.returnDate = new Date().toDateString();
+        maybeBook.available += 1;
+        return res(ctx.status(200));
+      }
+    }
   }),
 ];

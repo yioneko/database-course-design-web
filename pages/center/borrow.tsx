@@ -4,15 +4,15 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { useContext } from "react";
 import { useQuery } from "react-query";
-import { BorrowDetails } from "../../api/types";
-import CenterLayout from "../../components/CenterLayout";
+import { Transaction } from "../../api/types";
+import { CenterLayout } from "../../components/Layout";
 import UserCtx from "../../providers/user";
 
 const Borrowed: NextPage = () => {
   const { userId } = useContext(UserCtx);
 
   const { data, isFetching } = useQuery(["borrow", userId], async () => {
-    const res = await axios.get<BorrowDetails[]>(`/api/user/${userId}/borrow`);
+    const res = await axios.get<Transaction[]>(`/api/user/${userId}/borrow`);
     return res.data;
   });
 
@@ -23,17 +23,17 @@ const Borrowed: NextPage = () => {
 
   return (
     <CenterLayout>
-      <Table<BorrowDetails>
+      <Table<Transaction>
         loading={isFetching}
         dataSource={data}
         pagination={false}
-        rowClassName={(record) => (record.isReturned ? "bg-gray-200" : "")}
+        rowClassName={(record) => (record.returnDate ? "bg-gray-200" : "")}
         summary={(data) => (
           <Table.Summary.Row>
             <Table.Summary.Cell index={0} colSpan={4}>
               Currently borrowed books:{" "}
               <Typography.Text className="text-info">
-                {data.filter((v) => !v.isReturned).length}
+                {data.filter((v) => !v.returnDate).length}
               </Typography.Text>
             </Table.Summary.Cell>
             <Table.Summary.Cell index={1} colSpan={2}>
@@ -53,7 +53,7 @@ const Borrowed: NextPage = () => {
           </Table.Summary.Row>
         )}
       >
-        <Table.Column<BorrowDetails>
+        <Table.Column<Transaction>
           title="Title"
           dataIndex="title"
           key="title"
@@ -72,7 +72,7 @@ const Borrowed: NextPage = () => {
           key="dueDate"
           className="text-warning"
         />
-        <Table.Column<BorrowDetails>
+        <Table.Column<Transaction>
           title="Fine"
           dataIndex="fine"
           key="fine"

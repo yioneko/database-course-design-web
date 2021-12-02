@@ -2,8 +2,9 @@ import {
   BookFilled,
   DashboardOutlined,
   LogoutOutlined,
+  PieChartOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, Popover, Typography } from "antd";
+import { Button, Dropdown, Layout, Menu, MenuProps, Typography } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
@@ -12,21 +13,37 @@ import UserCtx from "../providers/user";
 import Login from "./Login";
 import { UserAvatar } from "./UserAvatar";
 
-function AvatarMenu() {
-  const { dispatch } = useContext(UserCtx);
+function AvatarMenu(props: MenuProps) {
+  const { isAdmin, dispatch } = useContext(UserCtx);
   const router = useRouter();
 
   return (
-    <Menu mode="vertical" selectable={false}>
-      <Menu.Item key="center" icon={<DashboardOutlined />}>
+    <Menu mode="vertical" selectable={false} {...props}>
+      <Menu.Item
+        key="center"
+        icon={<DashboardOutlined />}
+        className="leading-8"
+      >
         <Link href="/center">
           <a>User center</a>
         </Link>
       </Menu.Item>
+      {isAdmin && (
+        <Menu.Item
+          key="admin"
+          icon={<PieChartOutlined />}
+          className="leading-8"
+        >
+          <Link href="/admin">
+            <a>Administration</a>
+          </Link>
+        </Menu.Item>
+      )}
       <Menu.Item
         key="logout"
         icon={<LogoutOutlined />}
         onClick={() => dispatch({ type: "logout", router })}
+        className="leading-8"
       >
         Logout
       </Menu.Item>
@@ -43,8 +60,18 @@ function Header() {
   const [openLogin, setOpenLogin] = useState(false);
 
   return (
-    <AntdHeader className="flex items-center p-8 bg-primary text-yellow-300">
-      <BookFilled className="inline-block mr-auto text-yellow-300 text-3xl" />
+    <AntdHeader className="flex items-center bg-primary text-yellow-300">
+      <Link href="/">
+        <a className="inline-block mr-auto text-yellow-300 text-3xl hover:text-yellow-300">
+          <BookFilled />
+          <Typography.Title
+            className="inline ml-2 !text-yellow-100 font-serif align-bottom"
+            level={3}
+          >
+            SCUT Library
+          </Typography.Title>
+        </a>
+      </Link>
       {typeof userId === "undefined" ? (
         <Button
           type="default"
@@ -56,9 +83,9 @@ function Header() {
           Login
         </Button>
       ) : (
-        <Popover
-          content={<AvatarMenu />}
-          trigger="click"
+        <Dropdown
+          overlay={<AvatarMenu />}
+          trigger={["click"]}
           placement="bottomRight"
         >
           <div className="cursor-pointer leading-none">
@@ -67,7 +94,7 @@ function Header() {
             </Typography.Text>
             <UserAvatar isAdmin={isAdmin} />
           </div>
-        </Popover>
+        </Dropdown>
       )}
       <Login
         visible={openLogin}

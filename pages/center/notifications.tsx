@@ -5,7 +5,7 @@ import { NextPage } from "next";
 import { useContext } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { NotificationDetails } from "../../api/types";
-import CenterLayout from "../../components/CenterLayout";
+import { CenterLayout } from "../../components/Layout";
 import UserCtx from "../../providers/user";
 
 const Notifications: NextPage = () => {

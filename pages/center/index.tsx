@@ -1,7 +1,7 @@
 import { Descriptions, message } from "antd";
 import { NextPage } from "next";
 import { useContext, useEffect } from "react";
-import CenterLayout from "../../components/CenterLayout";
+import { CenterLayout } from "../../components/Layout";
 import { UserAvatar } from "../../components/UserAvatar";
 import { useUserDetails } from "../../hooks/queries";
 import UserCtx from "../../providers/user";

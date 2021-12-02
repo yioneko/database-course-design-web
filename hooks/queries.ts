@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ModifyPasswordRequest, UserResponse } from "../api/types";
+import { MetaData, ModifyPasswordRequest, UserResponse } from "../api/types";
 
 export function useUserDetails(userId: number | undefined) {
   return useQuery(
@@ -40,6 +40,19 @@ export function useUserPasswordMutation(userId: number) {
       onSuccess: () => {
         queryClient.invalidateQueries(["user", userId]);
       },
+    }
+  );
+}
+
+export function useMetaData() {
+  return useQuery(
+    "meta",
+    async () => {
+      const res = await axios.get<MetaData>("/api/meta");
+      return res.data;
+    },
+    {
+      enabled: true,
     }
   );
 }

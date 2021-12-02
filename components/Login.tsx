@@ -88,7 +88,7 @@ function Login({ visible, onLogin, onCancel, destroyOnClose }: LoginProps) {
           <Input.Password placeholder="password" prefix={<LockOutlined />} />
         </Form.Item>
         <Typography.Paragraph type="secondary" className="text-right">
-          *Default password for students and stuff is 123456
+          *Default password for students and staff is 123456
         </Typography.Paragraph>
         <Form.Item>
           <Button

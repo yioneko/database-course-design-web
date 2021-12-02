@@ -1,7 +1,8 @@
 import {
   BookInfo,
-  BorrowDetails,
+  Transaction,
   CommentInfo,
+  MetaData,
   NotificationDetails,
 } from "../api/types";
 
@@ -59,7 +60,7 @@ export const comments: Record<string, CommentInfo[]> = {
   "979-8749522310": [],
 };
 
-export const borrowed: BorrowDetails[] = [
+export const transactions: Transaction[] = [
   {
     isbn: "978-1119366447",
     title: "Professional JavaScript for Web Developers",
@@ -67,7 +68,7 @@ export const borrowed: BorrowDetails[] = [
     userId: 123,
     date: "2020-01-01",
     dueDate: "2020-01-31",
-    isReturned: true,
+    returnDate: "2020-01-30",
     fine: 0,
   },
   {
@@ -77,7 +78,6 @@ export const borrowed: BorrowDetails[] = [
     userId: 123,
     date: "2021-02-02",
     dueDate: "2021-02-31",
-    isReturned: false,
     fine: 99999.99,
   },
   {
@@ -87,7 +87,6 @@ export const borrowed: BorrowDetails[] = [
     userId: 456,
     date: "2014-02-19",
     dueDate: "2016-06-12",
-    isReturned: false,
     fine: 9999,
   },
 ];
@@ -118,3 +117,18 @@ export const notifications: NotificationDetails[] = [
     isRead: false,
   },
 ];
+
+export const metaData: MetaData = {
+  books: {
+    total: 9,
+    pages: 3,
+  },
+  users: {
+    total: 2,
+    pages: 1,
+  },
+  transactions: {
+    total: 3,
+    pages: 1,
+  },
+};

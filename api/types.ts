@@ -37,6 +37,10 @@ export interface BookInfo {
   available: number;
 }
 
+export type BookAddRequest = Partial<Omit<BookInfo, "isbn" | "available">> & {
+  isbn: string;
+};
+
 export interface BooksResponse {
   books: BookInfo[];
   nextPage?: number;
@@ -80,13 +84,45 @@ export interface NotificationDetails {
   isRead: boolean;
 }
 
-export interface BorrowDetails {
+export interface SendNotificationRequest {
+  senderId: number;
+  receiverId: number;
+  content: string;
+}
+
+export interface Transaction {
   isbn: string;
   title: string;
   author: string;
   userId: number;
   date: string;
   dueDate: string;
-  isReturned: boolean;
+  returnDate?: string;
   fine: number;
+}
+
+export interface MetaData {
+  books: {
+    total: number;
+    pages: number;
+  };
+  users: {
+    total: number;
+    pages: number;
+  };
+  transactions: {
+    total: number;
+    pages: number;
+  };
+}
+
+export interface BorrowRequest {
+  isbn: string;
+  userId: number;
+  dueDate: string;
+}
+
+export interface ReturnRequest {
+  isbn: string;
+  userId: number;
 }
