@@ -13,6 +13,7 @@
     "@ant-design/icons": "^4.7.0",
     "antd": "^4.17.1",
     "axios": "^0.24.0",
+    "database-course-design-model": "github:zsz12251665/database-course-design-model",
     "date-fns": "^2.26.0",
     "next": "12.0.4",
     "react": "17.0.2",
