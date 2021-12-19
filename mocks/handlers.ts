@@ -42,7 +42,7 @@ function mockPaginatedData<T>(
   { offset, pageLimit }: PaginationBaseRequest,
   repeat: number = 5
 ) {
-  if (offset + pageLimit > data.length) {
+  if (data.length > 0 && offset >= data.length * repeat) {
     throw new Error(message.pageOutOfRange);
   }
   const pageCount = Math.ceil((data.length * repeat) / pageLimit);
@@ -244,18 +244,25 @@ export const handlers = [
       const isbn = req.params.isbn;
 
       if (comments.hasOwnProperty(isbn)) {
-        const paginated = mockPaginatedData(
-          comments[isbn],
-          resolvePageQuery(req),
-          50
-        );
-        return res(
-          ctx.status(200),
-          ctx.json({
-            comments: paginated.data,
-            pageCount: paginated.pageCount,
-          })
-        );
+        try {
+          const paginated = mockPaginatedData(
+            comments[isbn],
+            resolvePageQuery(req),
+            100
+          );
+          return res(
+            ctx.status(200),
+            ctx.json({
+              comments: paginated.data,
+              pageCount: paginated.pageCount,
+            })
+          );
+        } catch (err) {
+          return res(
+            ctx.status(400),
+            ctx.json({ error: (err as Error).message })
+          );
+        }
       } else {
         return res(ctx.status(404), ctx.json({ error: message.bookNF }));
       }

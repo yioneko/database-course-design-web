@@ -1,26 +1,32 @@
 import { CheckSquareOutlined } from "@ant-design/icons";
-import { Button, List, message, Typography } from "antd";
+import { Button, List, Typography } from "antd";
 import axios from "axios";
 import { NextPage } from "next";
 import { useContext } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { NotificationDetails } from "../../api/types";
+import {
+  NotificationReadParams,
+  NotificationSuccessResponse,
+} from "../../common/interface";
 import { CenterLayout } from "../../components/Layout";
 import UserCtx from "../../providers/user";
 
 const Notifications: NextPage = () => {
-  const { userId, isAdmin } = useContext(UserCtx);
+  const { userId } = useContext(UserCtx);
   const { data, isFetching } = useQuery(["notifications", userId], async () => {
-    const res = await axios.get<NotificationDetails[]>(
+    const res = await axios.get<NotificationSuccessResponse>(
       `/api/notifications?userId=${userId}`
     );
-    return res.data;
+    return res.data.notifications;
   });
 
   const queryClient = useQueryClient();
   const readMutation = useMutation(
-    async (id: number) => {
-      return await axios.post(`/api/notifications/${id}`, { isRead: true });
+    async (id: string) => {
+      return await axios.post<NotificationReadParams>(
+        `/api/notifications/${id}`,
+        { isRead: true }
+      );
     },
     {
       onSuccess: () => {
@@ -28,20 +34,6 @@ const Notifications: NextPage = () => {
       },
     }
   );
-
-  // TODO: Refactor this to avoid duplicate judgment
-  if (userId === undefined) {
-    message.error("You must login first");
-    return <></>;
-  }
-
-  if (isAdmin) {
-    return (
-      <CenterLayout>
-        <Typography.Title level={3}>👷 Not supported yet</Typography.Title>
-      </CenterLayout>
-    );
-  }
 
   return (
     <CenterLayout>
@@ -73,7 +65,7 @@ const Notifications: NextPage = () => {
               {" "}
               sent at {item.date}
             </Typography.Text>
-            <Typography.Paragraph>{item.content}</Typography.Paragraph>
+            <Typography.Paragraph>{item.message}</Typography.Paragraph>
           </List.Item>
         )}
       />

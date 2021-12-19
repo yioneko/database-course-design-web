@@ -45,9 +45,8 @@ export interface TransactionInfo {
 export interface UserInfoParams {
   userId: string;
 }
-export type UserInfoResponse =
-  | Omit<UserInfo, "userId" | "passowrd">
-  | ErrorResponse;
+export type UserInfoSuccessResponse = Omit<UserInfo, "userId" | "passowrd">;
+export type UserInfoResponse = UserInfoSuccessResponse | ErrorResponse;
 
 export interface ModifyNameRequest {
   name: string;
@@ -67,18 +66,18 @@ export interface LoginRequest {
   userId: string;
   password: string;
 }
-export type LoginResponse =
-  | {
-      isAdmin: boolean;
-    }
-  | ErrorResponse;
 
-interface UserListSuccessResponse extends PaginationBaseResponse {
+export interface LoginSuccessResponse {
+  isAdmin: boolean;
+}
+export type LoginResponse = LoginSuccessResponse | ErrorResponse;
+
+export interface UserListSuccessResponse extends PaginationBaseResponse {
   users: UserInfo[];
 }
 export type UserListResponse = UserListSuccessResponse | ErrorResponse;
 
-interface BookInfoSuccessResponse extends Omit<BookInfo, "isbn"> {
+export interface BookInfoSuccessResponse extends Omit<BookInfo, "isbn"> {
   borrowed?: boolean; // whether the book is borrowed by the current user
 }
 export type BookInfoResponse = BookInfoSuccessResponse | ErrorResponse;
@@ -86,7 +85,7 @@ export interface BookInfoParams {
   isbn: string;
 }
 
-interface BookListSuccessResponse extends PaginationBaseResponse {
+export interface BookListSuccessResponse extends PaginationBaseResponse {
   books: BookInfo[];
 }
 export type BookListResponse = BookListSuccessResponse | ErrorResponse;
@@ -113,7 +112,7 @@ export interface BookReturnRequest {
 }
 export type BookReturnResponse = ErrorResponse | undefined;
 
-interface CommentListSuccessResponse extends PaginationBaseResponse {
+export interface CommentListSuccessResponse extends PaginationBaseResponse {
   comments: CommentInfo[];
 }
 export type CommentListResponse = CommentListSuccessResponse | ErrorResponse;
@@ -135,11 +134,10 @@ export interface CommentAddParams {
 export interface NotificationRequest {
   userId: string;
 }
-export type NotificationResponse =
-  | {
-      notifications: NotificationInfo[];
-    }
-  | ErrorResponse;
+export interface NotificationSuccessResponse {
+  notifications: NotificationInfo[];
+}
+export type NotificationResponse = NotificationSuccessResponse | ErrorResponse;
 
 export interface NotificationReadParams {
   id: string;
@@ -156,13 +154,14 @@ export type NotificationSendResponse = ErrorResponse | undefined;
 export interface UserBorrowInfoParams {
   userId: string;
 }
+export interface UserBorrowInfoSuccessResponse {
+  transactions: TransactionInfo[];
+}
 export type UserBorrowInfoResponse =
-  | {
-      transactions: TransactionInfo[];
-    }
+  | UserBorrowInfoSuccessResponse
   | ErrorResponse;
 
-interface TransactionListSuccessResponse extends PaginationBaseResponse {
+export interface TransactionListSuccessResponse extends PaginationBaseResponse {
   transactions: TransactionInfo[];
 }
 export type TransactionListResponse =
@@ -180,6 +179,6 @@ interface PaginationBaseResponse {
   pageCount: number;
 }
 
-interface ErrorResponse {
+export interface ErrorResponse {
   error: string; // error message
 }

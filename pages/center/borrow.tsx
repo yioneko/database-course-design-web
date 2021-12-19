@@ -4,28 +4,27 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { useContext } from "react";
 import { useQuery } from "react-query";
-import { Transaction } from "../../api/types";
+import {
+  TransactionInfo,
+  UserBorrowInfoSuccessResponse,
+} from "../../common/interface";
 import { CenterLayout } from "../../components/Layout";
 import UserCtx from "../../providers/user";
 
 const Borrowed: NextPage = () => {
   const { userId } = useContext(UserCtx);
-
   const { data, isFetching } = useQuery(["borrow", userId], async () => {
-    const res = await axios.get<Transaction[]>(`/api/user/${userId}/borrow`);
+    const res = await axios.get<UserBorrowInfoSuccessResponse>(
+      `/api/user/${userId}/borrow`
+    );
     return res.data;
   });
 
-  if (userId === undefined) {
-    message.error("You must login first");
-    return <></>;
-  }
-
   return (
     <CenterLayout>
-      <Table<Transaction>
+      <Table<TransactionInfo>
         loading={isFetching}
-        dataSource={data}
+        dataSource={data?.transactions}
         pagination={false}
         rowClassName={(record) => (record.returnDate ? "bg-gray-200" : "")}
         summary={(data) => (
@@ -53,7 +52,7 @@ const Borrowed: NextPage = () => {
           </Table.Summary.Row>
         )}
       >
-        <Table.Column<Transaction>
+        <Table.Column<TransactionInfo>
           title="Title"
           dataIndex="title"
           key="title"
@@ -72,7 +71,7 @@ const Borrowed: NextPage = () => {
           key="dueDate"
           className="text-warning"
         />
-        <Table.Column<Transaction>
+        <Table.Column<TransactionInfo>
           title="Fine"
           dataIndex="fine"
           key="fine"

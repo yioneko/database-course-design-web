@@ -1,9 +1,10 @@
 import { EditOutlined } from "@ant-design/icons";
-import { Input, message } from "antd";
+import { Input, message as antdMessage } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useUserNameMutation } from "../hooks/queries";
+import message from "../common/message.json";
 
-function NameEdit({ userId, name }: { userId: number; name: string }) {
+function NameEdit({ userId, name }: { userId: string; name: string }) {
   const mutation = useUserNameMutation(userId);
   const [editing, setEditing] = useState(false);
 
@@ -22,13 +23,13 @@ function NameEdit({ userId, name }: { userId: number; name: string }) {
         ref={inputRef}
         className="max-w-xs"
         defaultValue={name}
-        placeholder="Enter your new name"
+        placeholder={message.enterName}
         disabled={mutation.isLoading}
         onPressEnter={(e) => {
           mutation
             .mutateAsync((e.target as HTMLInputElement).value as string)
             .then(() => {
-              message.success("Name modified successfully");
+              antdMessage.success(message.nameModified);
               setEditing(false);
             });
         }}

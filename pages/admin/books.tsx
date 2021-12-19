@@ -1,25 +1,17 @@
-import {
-  Button,
-  DatePicker,
-  Form,
-  InputNumber,
-  message,
-  Modal,
-  Table,
-} from "antd";
-import axios, { AxiosError } from "axios";
+import { Button, Form, Input, message, Modal, Table } from "antd";
+import axios from "axios";
 import { NextPage } from "next";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
+  BookBorrowRequest,
   BookInfo,
-  BooksResponse,
-  BorrowRequest,
-  ReturnRequest,
-} from "../../api/types";
+  BookListSuccessResponse,
+  BookReturnRequest,
+} from "../../common/interface";
 import BookAdd from "../../components/BookAdd";
 import { AdminLayout } from "../../components/Layout";
-import { useMetaData } from "../../hooks/queries";
+import usePaginationParams from "../../hooks/usePaginationParams";
 
 function useBorrowReturn() {
   const [inActionBook, setInActionBook] = useState<
@@ -28,7 +20,7 @@ function useBorrowReturn() {
   const queryClient = useQueryClient();
 
   const borrowMutation = useMutation(
-    async (body: BorrowRequest) => {
+    async (body: BookBorrowRequest) => {
       const res = await axios.post("/api/borrow", body);
       return res.data;
     },
@@ -38,15 +30,11 @@ function useBorrowReturn() {
         queryClient.invalidateQueries("books");
         message.success("Success");
       },
-      // TODO: better error handling
-      onError: (err: AxiosError) => {
-        message.error(err.response?.data.error);
-      },
     }
   );
 
   const returnMutation = useMutation(
-    async (body: ReturnRequest) => {
+    async (body: BookReturnRequest) => {
       const res = await axios.post("/api/return", body);
       return res.data;
     },
@@ -55,9 +43,6 @@ function useBorrowReturn() {
         setInActionBook(undefined);
         queryClient.invalidateQueries("books");
         message.success("Success");
-      },
-      onError: (err: AxiosError) => {
-        message.error(err.response?.data.error);
       },
     }
   );
@@ -71,17 +56,17 @@ function useBorrowReturn() {
 }
 
 const BooksAdmin: NextPage = () => {
-  const { data: metaData } = useMetaData();
+  const { paginationParams, paginationConfig } = usePaginationParams();
 
-  const [page, setPage] = useState(0);
-  const { data, isFetching } = useQuery(["books", page], async () => {
-    const response = await axios.get<BooksResponse>("/api/books", {
-      params: {
-        page,
-      },
-    });
-    return response.data;
-  });
+  const { data, isFetching } = useQuery(
+    ["books", paginationParams],
+    async () => {
+      const response = await axios.get<BookListSuccessResponse>("/api/books", {
+        params: paginationParams,
+      });
+      return response.data;
+    }
+  );
 
   const [openAdd, setOpenAdd] = useState(false);
 
@@ -101,13 +86,7 @@ const BooksAdmin: NextPage = () => {
       <Table
         dataSource={data?.books}
         rowKey="isbn"
-        pagination={{
-          total: metaData?.books.total,
-          pageSize: data?.books.length,
-        }}
-        onChange={(pagination) => {
-          setPage((pagination.current ?? 1) - 1);
-        }}
+        pagination={paginationConfig(data?.pageCount)}
         loading={isFetching}
         summary={() => (
           <Table.Summary.Row>
@@ -121,6 +100,7 @@ const BooksAdmin: NextPage = () => {
         <Table.Column title="Author" dataIndex="author" key="author" />
         <Table.Column title="ISBN" dataIndex="isbn" key="isbn" />
         <Table.Column title="Available" dataIndex="available" key="available" />
+        {/*TODO: nested line for actions*/}
         <Table.Column<BookInfo>
           title="Action"
           key="action"
@@ -135,15 +115,11 @@ const BooksAdmin: NextPage = () => {
                         borrowMutation.mutate({
                           isbn: record.isbn,
                           userId: values.userId,
-                          dueDate: values.dueDate.format("YYYY-MM-DD"),
                         });
                       }}
                     >
                       <Form.Item name="userId" label="ID">
-                        <InputNumber controls={false} />
-                      </Form.Item>
-                      <Form.Item name="dueDate" label="Due">
-                        <DatePicker />
+                        <Input />
                       </Form.Item>
                       <Form.Item>
                         <Button htmlType="submit" type="link">
@@ -162,7 +138,7 @@ const BooksAdmin: NextPage = () => {
                       }}
                     >
                       <Form.Item name="userId" label="ID">
-                        <InputNumber controls={false} />
+                        <Input />
                       </Form.Item>
                       <Form.Item>
                         <Button htmlType="submit" type="link">

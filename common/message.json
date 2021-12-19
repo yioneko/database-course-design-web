@@ -1,11 +1,30 @@
 {
   "userNF": "User not found",
   "bookNF": "Book not found",
+
   "wrongNameOrPwd": "Wrong username or password",
   "wrongPwd": "Wrong password",
+
   "pageOutOfRange": "Page out of range",
   "invalidPageQuery": "Invalid page query params",
+  "reqFailed": "Error happened during request",
+
   "requireTitleAndAuthor": "Title and author are required",
   "bookNotAvailable": "Book is not available",
-  "bookNotBorrowed": "Book is not borrowed"
+  "bookNotBorrowed": "Book is not borrowed",
+
+  "mustLogin": "You must login first",
+  "mustAdmin": "Only admin have access to this",
+  "default123456": "Default password for students and staff is 123456",
+  "loginTitle": "Login to SCUT Library",
+
+  "writeComment": "Write down your feeling about this book!",
+  "disallowComment": "Only user borrowing this book is allowed to comment",
+  "commentAdded": "Comment added",
+
+  "enterName": "Enter your new name",
+  "nameModified": "Name modified successfully",
+
+  "pwdNotMatch": "The two passwords do not match",
+  "pwdReset": "Password reset successfully"
 }

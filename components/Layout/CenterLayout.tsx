@@ -3,6 +3,7 @@ import {
   NotificationOutlined,
   ProfileOutlined,
 } from "@ant-design/icons";
+import useAccessControl from "../../hooks/useAccessControl";
 import Base from "./Base";
 
 const routesToProps = {
@@ -24,6 +25,8 @@ const routesToProps = {
 };
 
 export function CenterLayout({ children }: { children: React.ReactNode }) {
+  useAccessControl();
+
   return (
     <Base
       hasSider

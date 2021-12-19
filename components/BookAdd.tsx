@@ -2,7 +2,7 @@ import { Button, Form, Input, message } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { BookAddRequest, BookInfoResponse } from "../api/types";
+import { BookAddRequest, BookInfoResponse } from "../common/interface";
 
 function BookAdd() {
   const [form] = Form.useForm();
