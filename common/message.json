@@ -1,0 +1,11 @@
+{
+  "userNF": "User not found",
+  "bookNF": "Book not found",
+  "wrongNameOrPwd": "Wrong username or password",
+  "wrongPwd": "Wrong password",
+  "pageOutOfRange": "Page out of range",
+  "invalidPageQuery": "Invalid page query params",
+  "requireTitleAndAuthor": "Title and author are required",
+  "bookNotAvailable": "Book is not available",
+  "bookNotBorrowed": "Book is not borrowed"
+}

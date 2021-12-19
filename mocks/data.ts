@@ -1,20 +1,19 @@
 import {
   BookInfo,
-  Transaction,
+  TransactionInfo,
   CommentInfo,
-  MetaData,
-  NotificationDetails,
-} from "../api/types";
+  NotificationInfo,
+} from "../common/interface";
 
 export const users = {
   user: {
-    userId: 123,
+    userId: "123",
     name: "User",
     isAdmin: false,
     password: "123456",
   },
   admin: {
-    userId: 456,
+    userId: "456",
     name: "Admin",
     isAdmin: true,
     password: "123456",
@@ -60,12 +59,12 @@ export const comments: Record<string, CommentInfo[]> = {
   "979-8749522310": [],
 };
 
-export const transactions: Transaction[] = [
+export const transactions: TransactionInfo[] = [
   {
     isbn: "978-1119366447",
     title: "Professional JavaScript for Web Developers",
     author: "Matt Frisbie",
-    userId: 123,
+    userId: "123",
     date: "2020-01-01",
     dueDate: "2020-01-31",
     returnDate: "2020-01-30",
@@ -75,7 +74,7 @@ export const transactions: Transaction[] = [
     isbn: "978-1119366447",
     title: "Professional JavaScript for Web Developers",
     author: "Matt Frisbie",
-    userId: 123,
+    userId: "123",
     date: "2021-02-02",
     dueDate: "2021-02-31",
     fine: 99999.99,
@@ -84,51 +83,36 @@ export const transactions: Transaction[] = [
     isbn: "978-1260084504",
     title: "Alice in Wonderland",
     author: "Lewis Carroll",
-    userId: 456,
+    userId: "456",
     date: "2014-02-19",
     dueDate: "2016-06-12",
     fine: 9999,
   },
 ];
 
-export const notifications: NotificationDetails[] = [
+export const notifications: NotificationInfo[] = [
   {
-    id: 1,
+    id: "1",
     sender: "Admin",
     receiver: "User",
     date: "1970-01-01",
-    content: "You have a new message",
+    message: "You have a new message",
     isRead: true,
   },
   {
-    id: 2,
+    id: "2",
     sender: "Admin",
     receiver: "User",
     date: "2021-10-10",
-    content: "Please return the book",
+    message: "Please return the book",
     isRead: false,
   },
   {
-    id: 3,
+    id: "3",
     sender: "Admin",
     receiver: "User",
     date: "2021-11-20",
-    content: "Test",
+    message: "Test",
     isRead: false,
   },
 ];
-
-export const metaData: MetaData = {
-  books: {
-    total: 9,
-    pages: 3,
-  },
-  users: {
-    total: 2,
-    pages: 1,
-  },
-  transactions: {
-    total: 3,
-    pages: 1,
-  },
-};

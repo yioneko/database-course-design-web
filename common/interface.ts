@@ -1,33 +1,8 @@
-export interface UserResponse {
-  userId: number;
+export interface UserInfo {
+  userId: string;
   name: string;
-  isAdmin: boolean;
-}
-
-export interface ModifyNameRequest {
-  name: string;
-}
-
-export interface ModifyPasswordRequest {
   password: string;
-  newPassword: string;
-}
-
-export type ModifyUserRequest = ModifyNameRequest | ModifyPasswordRequest;
-
-export interface LoginRequest {
-  userId: number;
-  password: string;
-}
-
-export interface LoginResponse {
   isAdmin: boolean;
-  token: string;
-}
-
-export interface BooksRequest {
-  page: number;
-  filter?: string;
 }
 
 export interface BookInfo {
@@ -37,92 +12,174 @@ export interface BookInfo {
   available: number;
 }
 
-export type BookAddRequest = Partial<Omit<BookInfo, "isbn" | "available">> & {
-  isbn: string;
-};
-
-export interface BooksResponse {
-  books: BookInfo[];
-  nextPage?: number;
-}
-
-export interface BookInfoResponse {
-  title: string;
-  author: string;
-  available: number;
-  borrowed?: boolean;
-}
-
-export interface CommentRequest {
-  isbn: string;
-}
-
 export interface CommentInfo {
   comment: string;
   username: string;
   date: string;
 }
 
-export interface CommentResponse {
-  comments: CommentInfo[];
-}
-
-// TODO: Token?
-export interface AddCommentRequest {
-  isbn: string;
-  userId: number;
-  comment: string;
-  date: string;
-}
-
-export interface NotificationDetails {
-  id: number;
+export interface NotificationInfo {
+  id: string;
   sender: string;
   receiver: string;
   date: string;
-  content: string;
+  message: string;
   isRead: boolean;
 }
 
-export interface SendNotificationRequest {
-  senderId: number;
-  receiverId: number;
-  content: string;
-}
-
-export interface Transaction {
+export interface TransactionInfo {
   isbn: string;
   title: string;
   author: string;
-  userId: number;
+  userId: string;
   date: string;
   dueDate: string;
   returnDate?: string;
   fine: number;
 }
 
-export interface MetaData {
-  books: {
-    total: number;
-    pages: number;
-  };
-  users: {
-    total: number;
-    pages: number;
-  };
-  transactions: {
-    total: number;
-    pages: number;
-  };
+/*
+ * Interfaces of requests & responses
+ * Some request types are undefined because they are presented in api routes
+ */
+export interface UserInfoParams {
+  userId: string;
+}
+export type UserInfoResponse =
+  | Omit<UserInfo, "userId" | "passowrd">
+  | ErrorResponse;
+
+export interface ModifyNameRequest {
+  name: string;
+}
+export interface ModifyPasswordRequest {
+  password: string;
+  newPassword: string;
+}
+// collapse two types of modification requests
+export type ModifyUserRequest = ModifyNameRequest | ModifyPasswordRequest;
+export interface ModifyUserParams {
+  userId: string;
+}
+export type ModifyUserResponse = ErrorResponse | undefined;
+
+export interface LoginRequest {
+  userId: string;
+  password: string;
+}
+export type LoginResponse =
+  | {
+      isAdmin: boolean;
+    }
+  | ErrorResponse;
+
+interface UserListSuccessResponse extends PaginationBaseResponse {
+  users: UserInfo[];
+}
+export type UserListResponse = UserListSuccessResponse | ErrorResponse;
+
+interface BookInfoSuccessResponse extends Omit<BookInfo, "isbn"> {
+  borrowed?: boolean; // whether the book is borrowed by the current user
+}
+export type BookInfoResponse = BookInfoSuccessResponse | ErrorResponse;
+export interface BookInfoParams {
+  isbn: string;
 }
 
-export interface BorrowRequest {
+interface BookListSuccessResponse extends PaginationBaseResponse {
+  books: BookInfo[];
+}
+export type BookListResponse = BookListSuccessResponse | ErrorResponse;
+
+export interface BookAddRequest
+  extends Partial<Omit<BookInfo, "isbn" | "available">> {
   isbn: string;
-  userId: number;
-  dueDate: string;
+}
+export type BookAddResponse = ErrorResponse | undefined;
+
+export interface BookBorrowRequest {
+  isbn: string;
+  userId: string;
+}
+export type BookBorrowResponse =
+  | ErrorResponse
+  | {
+      dueDate: string; // this is calculated by the server
+    };
+
+export interface BookReturnRequest {
+  isbn: string;
+  userId: string;
+}
+export type BookReturnResponse = ErrorResponse | undefined;
+
+interface CommentListSuccessResponse extends PaginationBaseResponse {
+  comments: CommentInfo[];
+}
+export type CommentListResponse = CommentListSuccessResponse | ErrorResponse;
+export interface CommentListParams {
+  isbn: string;
 }
 
-export interface ReturnRequest {
+export interface CommentAddRequest {
   isbn: string;
   userId: number;
+  comment: string;
+  date: string;
+}
+export type CommentAddResponse = ErrorResponse | undefined;
+export interface CommentAddParams {
+  isbn: string;
+}
+
+export interface NotificationRequest {
+  userId: string;
+}
+export type NotificationResponse =
+  | {
+      notifications: NotificationInfo[];
+    }
+  | ErrorResponse;
+
+export interface NotificationReadParams {
+  id: string;
+}
+export type NotificationReadResponse = ErrorResponse | undefined;
+
+export interface NotificationSendRequest {
+  senderId: string;
+  receiverId: string;
+  message: string;
+}
+export type NotificationSendResponse = ErrorResponse | undefined;
+
+export interface UserBorrowInfoParams {
+  userId: string;
+}
+export type UserBorrowInfoResponse =
+  | {
+      transactions: TransactionInfo[];
+    }
+  | ErrorResponse;
+
+interface TransactionListSuccessResponse extends PaginationBaseResponse {
+  transactions: TransactionInfo[];
+}
+export type TransactionListResponse =
+  | TransactionListSuccessResponse
+  | ErrorResponse;
+
+/* General auxialiary types */
+// this is attached in url params
+export interface PaginationBaseRequest {
+  offset: number;
+  pageLimit: number;
+}
+
+interface PaginationBaseResponse {
+  pageCount: number;
+}
+
+interface ErrorResponse {
+  error: string; // error message
 }
