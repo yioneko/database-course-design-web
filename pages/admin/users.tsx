@@ -1,29 +1,33 @@
-import { Button, Form, Popover, Table, Input, message } from "antd";
+import { Button, Form, Input, message, Popover, Table } from "antd";
 import axios from "axios";
 import { NextPage } from "next";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useMutation, useQuery } from "react-query";
-import { SendNotificationRequest, UserResponse } from "../../api/types";
+import {
+  NotificationSendRequest,
+  UserInfo,
+  UserListSuccessResponse,
+} from "../../common/interface";
 import { AdminLayout } from "../../components/Layout";
-import { useMetaData } from "../../hooks/queries";
+import usePaginationParams from "../../hooks/usePaginationParams";
 import UserCtx from "../../providers/user";
 
 const UsersAdmin: NextPage = () => {
-  const { data: metaData } = useMetaData();
-  const [page, setPage] = useState(0);
+  const { paginationParams, paginationConfig } = usePaginationParams();
 
-  const { data, isFetching } = useQuery(["users", page], async () => {
-    const response = await axios.get<UserResponse[]>("/api/user", {
-      params: {
-        page,
-      },
-    });
-    return response.data;
-  });
+  const { data, isFetching } = useQuery(
+    ["users", paginationParams],
+    async () => {
+      const response = await axios.get<UserListSuccessResponse>("/api/user", {
+        params: paginationParams,
+      });
+      return response.data;
+    }
+  );
 
   const [notifyForm] = Form.useForm();
   const notificationMutation = useMutation(
-    (req: SendNotificationRequest) => {
+    (req: NotificationSendRequest) => {
       return axios.post("/api/notifications", req);
     },
     {
@@ -35,21 +39,15 @@ const UsersAdmin: NextPage = () => {
   );
   const { userId } = useContext(UserCtx);
 
-  if (typeof userId === "undefined") {
+  if (userId === undefined) {
     return <div>Access denied</div>;
   }
 
   return (
     <AdminLayout>
       <Table
-        dataSource={data}
-        pagination={{
-          total: metaData?.users.total,
-          pageSize: data?.length,
-        }}
-        onChange={(pagination) => {
-          setPage((pagination.current ?? 1) - 1);
-        }}
+        dataSource={data?.users}
+        pagination={paginationConfig(data?.pageCount)}
         loading={isFetching}
       >
         <Table.Column title="User ID" dataIndex="userId" key="userId" />
@@ -62,7 +60,7 @@ const UsersAdmin: NextPage = () => {
             return isAdmin ? "Yes" : "No";
           }}
         />
-        <Table.Column<UserResponse>
+        <Table.Column<UserInfo>
           title="Action"
           key="action"
           render={(_, record) => (
@@ -76,7 +74,7 @@ const UsersAdmin: NextPage = () => {
                     notificationMutation.mutate({
                       receiverId: record.userId,
                       senderId: userId,
-                      content: values.content,
+                      message: values.message,
                     });
                   }}
                 >

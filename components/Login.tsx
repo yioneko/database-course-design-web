@@ -2,12 +2,13 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Alert, Button, Form, Input, Modal, Typography } from "antd";
 import axios from "axios";
 import { useContext, useState } from "react";
-import { LoginResponse } from "../api/types";
+import { LoginSuccessResponse } from "../common/interface";
 import UserCtx from "../providers/user";
+import message from "../common/message.json";
 
 interface LoginProps {
   visible: boolean;
-  onLogin: (token: string) => void;
+  onLogin: () => void;
   onCancel: () => void;
   destroyOnClose?: boolean;
 }
@@ -25,20 +26,19 @@ function Login({ visible, onLogin, onCancel, destroyOnClose }: LoginProps) {
   >(undefined);
 
   const onFinish = (values: { id: string; password: string }) => {
-    const userId = parseInt(values.id);
     setSubmitting(true);
     axios
-      .post<LoginResponse>("/api/login", {
-        userId: userId,
+      .post<LoginSuccessResponse>("/api/login", {
+        userId: values.id,
         password: values.password,
       })
       .then(({ data }) => {
         // localStorage.setItem("token", data.token);
         dispatch({
           type: "login",
-          payload: { userId, isAdmin: data.isAdmin },
+          payload: { userId: values.id, isAdmin: data.isAdmin },
         });
-        onLogin(data.token);
+        onLogin();
 
         setFormAlert(undefined);
         form.setFieldsValue({ id: form.getFieldValue("id"), password: "" });
@@ -56,39 +56,21 @@ function Login({ visible, onLogin, onCancel, destroyOnClose }: LoginProps) {
 
   return (
     <Modal
-      title="Login to SCUT library"
+      title={message.loginTitle}
       visible={visible}
       onCancel={onCancel}
       footer={null}
       destroyOnClose={destroyOnClose}
     >
       <Form name="login" form={form} onFinish={onFinish}>
-        <Form.Item
-          name="id"
-          rules={[
-            { required: true },
-            {
-              validator: (_, value) => {
-                if (!value) {
-                  return Promise.resolve();
-                }
-                const userId = parseInt(value);
-                if (isNaN(userId)) {
-                  return Promise.reject("id should only contain numbers");
-                } else {
-                  return Promise.resolve();
-                }
-              },
-            },
-          ]}
-        >
+        <Form.Item name="id" rules={[{ required: true }]}>
           <Input placeholder="id" prefix={<UserOutlined />} />
         </Form.Item>
         <Form.Item name="password" rules={[{ required: true }]}>
           <Input.Password placeholder="password" prefix={<LockOutlined />} />
         </Form.Item>
         <Typography.Paragraph type="secondary" className="text-right">
-          *Default password for students and staff is 123456
+          *{message.default123456}
         </Typography.Paragraph>
         <Form.Item>
           <Button

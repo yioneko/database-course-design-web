@@ -1,24 +1,18 @@
-import { Descriptions, message } from "antd";
+import { Descriptions } from "antd";
 import { NextPage } from "next";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { CenterLayout } from "../../components/Layout";
+import NameEdit from "../../components/NameEdit";
+import PassowrdEdit from "../../components/PasswordEdit";
 import { UserAvatar } from "../../components/UserAvatar";
 import { useUserDetails } from "../../hooks/queries";
 import UserCtx from "../../providers/user";
-import NameEdit from "../../components/NameEdit";
-import PassowrdEdit from "../../components/PasswordEdit";
 
 const Profile: NextPage = () => {
   const { userId, isAdmin } = useContext(UserCtx);
   const { data } = useUserDetails(userId);
 
-  // TODO: Refactor this to avoid duplicate judgment
-  useEffect(() => {
-    if (userId === undefined) {
-      message.error("You must login first");
-    }
-  }, [userId]);
-  if (userId === undefined) {
+  if (!userId) {
     return <></>;
   }
 

@@ -2,7 +2,7 @@ import { createContext, useReducer } from "react";
 import { NextRouter } from "next/router";
 
 export interface UserInfo {
-  userId: number | undefined;
+  userId: string | undefined;
   isAdmin: boolean;
 }
 

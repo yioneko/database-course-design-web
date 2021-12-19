@@ -2,7 +2,10 @@ import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { dehydrate, QueryClient, useQuery } from "react-query";
-import CommentList, { getComments } from "../../components/CommentList";
+import CommentList, {
+  getComments,
+  initialPaginationParams,
+} from "../../components/CommentList";
 import CommentEdit, { getBookInfo } from "../../components/CommentEdit";
 import { useContext } from "react";
 import UserCtx from "../../providers/user";
@@ -15,7 +18,9 @@ export const getServerSideProps: GetServerSideProps<
   const { isbn } = context.params as { isbn: string };
 
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(["comments", isbn], () => getComments(isbn));
+  await queryClient.prefetchQuery(["comments", isbn], () =>
+    getComments(isbn, initialPaginationParams)
+  );
   await queryClient.prefetchQuery(["bookInfo", isbn], () => getBookInfo(isbn));
 
   return {
@@ -67,9 +72,9 @@ const CommentPage: NextPage = () => {
           </Descriptions>
         </Col>
         <Col span={16}>
-          <CommentList isbn={isbn} />
-          <Divider />
           <CommentEdit isbn={isbn} />
+          <Divider />
+          <CommentList isbn={isbn} />
         </Col>
       </Row>
     </div>

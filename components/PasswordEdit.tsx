@@ -1,7 +1,8 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message as antdMessage } from "antd";
 import { useUserPasswordMutation } from "../hooks/queries";
+import message from "../common/message.json";
 
-function PassowrdEdit({ userId }: { userId: number }) {
+function PassowrdEdit({ userId }: { userId: string }) {
   const [form] = Form.useForm();
   const mutation = useUserPasswordMutation(userId);
 
@@ -12,10 +13,11 @@ function PassowrdEdit({ userId }: { userId: number }) {
         newPassword: values.new,
       })
       .then(() => {
-        message.success("Password reset successfully");
+        form.resetFields();
+        antdMessage.success(message.pwdReset);
       })
       .catch((err) => {
-        message.error(err.response.data.error);
+        antdMessage.error(err.response.data.error);
       });
   };
 
@@ -37,7 +39,7 @@ function PassowrdEdit({ userId }: { userId: number }) {
             validator: (_, value: string | undefined) =>
               !value || value === form.getFieldValue("new")
                 ? Promise.resolve()
-                : Promise.reject("The two passwords do not match"),
+                : Promise.reject(message.pwdNotMatch),
           },
         ]}
       >

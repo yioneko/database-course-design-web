@@ -1,12 +1,13 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message as antdMessage } from "antd";
 import axios from "axios";
 import { useContext } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { BookInfoResponse } from "../api/types";
+import { BookInfoSuccessResponse } from "../common/interface";
 import UserCtx from "../providers/user";
+import message from "../common/message.json";
 
-export async function getBookInfo(isbn: string, userId?: number) {
-  const response = await axios.get<BookInfoResponse>(
+export async function getBookInfo(isbn: string, userId?: string) {
+  const response = await axios.get<BookInfoSuccessResponse>(
     `/api/books/${isbn}/info`,
     {
       params: {
@@ -29,8 +30,8 @@ function CommentEdit({ isbn }: { isbn: string }) {
       axios.post(`/api/books/${isbn}/comments`, { userId, comment }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["bookInfo", isbn, userId]);
-        message.success("Comment added");
+        queryClient.invalidateQueries(["comments", isbn]);
+        antdMessage.success(message.commentAdded);
       },
     }
   );
@@ -47,9 +48,7 @@ function CommentEdit({ isbn }: { isbn: string }) {
         <Input.TextArea
           name="comment"
           placeholder={
-            allowComment
-              ? "Write down your feeling about this book!"
-              : "Only user borrowing this book is allowed to comment"
+            allowComment ? message.writeComment : message.disallowComment
           }
           disabled={!allowComment}
           rows={6}

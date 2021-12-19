@@ -1,12 +1,17 @@
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { MetaData, ModifyPasswordRequest, UserResponse } from "../api/types";
+import {
+  ModifyPasswordRequest,
+  UserInfoSuccessResponse,
+} from "../common/interface";
 
-export function useUserDetails(userId: number | undefined) {
+export function useUserDetails(userId: string | undefined) {
   return useQuery(
     ["user", userId],
     async () => {
-      const res = await axios.get<UserResponse>(`/api/user/${userId}`);
+      const res = await axios.get<UserInfoSuccessResponse>(
+        `/api/user/${userId}`
+      );
       return { name: res.data.name };
     },
     {
@@ -15,7 +20,7 @@ export function useUserDetails(userId: number | undefined) {
   );
 }
 
-export function useUserNameMutation(userId: number) {
+export function useUserNameMutation(userId: string) {
   const queryClient = useQueryClient();
   return useMutation(
     (name: string) => {
@@ -30,7 +35,7 @@ export function useUserNameMutation(userId: number) {
 }
 
 // TODO: Logout & redirect
-export function useUserPasswordMutation(userId: number) {
+export function useUserPasswordMutation(userId: string) {
   const queryClient = useQueryClient();
   return useMutation(
     ({ password, newPassword }: ModifyPasswordRequest) => {
@@ -40,19 +45,6 @@ export function useUserPasswordMutation(userId: number) {
       onSuccess: () => {
         queryClient.invalidateQueries(["user", userId]);
       },
-    }
-  );
-}
-
-export function useMetaData() {
-  return useQuery(
-    "meta",
-    async () => {
-      const res = await axios.get<MetaData>("/api/meta");
-      return res.data;
-    },
-    {
-      enabled: true,
     }
   );
 }

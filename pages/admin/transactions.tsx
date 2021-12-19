@@ -1,36 +1,32 @@
 import { Table } from "antd";
 import axios from "axios";
 import { NextPage } from "next";
-import { useState } from "react";
 import { useQuery } from "react-query";
-import { Transaction } from "../../api/types";
+import { TransactionListSuccessResponse } from "../../common/interface";
 import { AdminLayout } from "../../components/Layout";
-import { useMetaData } from "../../hooks/queries";
+import usePaginationParams from "../../hooks/usePaginationParams";
 
 const TransactionsAdmin: NextPage = () => {
-  const { data: metaData } = useMetaData();
-  const [page, setPage] = useState(0);
+  const { paginationParams, paginationConfig } = usePaginationParams();
 
-  const { data, isFetching } = useQuery(["transactions", page], async () => {
-    const response = await axios.get<Transaction[]>("/api/transactions", {
-      params: {
-        page,
-      },
-    });
-    return response.data;
-  });
+  const { data, isFetching } = useQuery(
+    ["transactions", paginationParams],
+    async () => {
+      const response = await axios.get<TransactionListSuccessResponse>(
+        "/api/transactions",
+        {
+          params: paginationParams,
+        }
+      );
+      return response.data;
+    }
+  );
 
   return (
     <AdminLayout>
       <Table
-        dataSource={data}
-        pagination={{
-          total: metaData?.transactions.total,
-          pageSize: data?.length,
-        }}
-        onChange={(pagination) => {
-          setPage((pagination.current ?? 1) - 1);
-        }}
+        dataSource={data?.transactions}
+        pagination={paginationConfig(data?.pageCount)}
         loading={isFetching}
       >
         <Table.Column title="Title" dataIndex="title" key="title" />

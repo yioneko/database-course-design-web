@@ -10,7 +10,7 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useInfiniteQuery } from "react-query";
-import { BooksResponse } from "../api/types";
+import { BookListSuccessResponse } from "../common/interface";
 
 function FieldDescription({
   field,
@@ -31,22 +31,32 @@ function FieldDescription({
   );
 }
 
+const loadMoreLimit = 3;
+
 function BookList() {
   const [filter, setFilter] = useState("");
 
   const { data, hasNextPage, fetchNextPage, isFetching, isFetchingNextPage } =
     useInfiniteQuery(
-      ["books", filter],
+      ["books", { filter, pageLimit: loadMoreLimit }],
       async ({ pageParam = 0 }) => {
-        const response = await axios.get<BooksResponse>("/api/books", {
-          params: {
-            page: pageParam,
-            filter: filter,
-          },
-        });
+        const response = await axios.get<BookListSuccessResponse>(
+          "/api/books",
+          {
+            params: {
+              offset: pageParam * loadMoreLimit,
+              pageLimit: loadMoreLimit,
+              filter: filter,
+            },
+          }
+        );
         return response.data;
       },
-      { getNextPageParam: (lastPage) => lastPage.nextPage }
+      {
+        keepPreviousData: true,
+        getNextPageParam: (lastPage, allPages) =>
+          allPages.length < lastPage.pageCount ? allPages.length : undefined,
+      }
     );
 
   const onSearch = (value: string) => {

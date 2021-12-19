@@ -4,6 +4,7 @@ import {
   FundOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
+import useAccessControl from "../../hooks/useAccessControl";
 import Base from "./Base";
 
 const routesToProps = {
@@ -30,6 +31,8 @@ const routesToProps = {
 };
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
+  useAccessControl(true);
+
   return (
     <Base
       hasSider
