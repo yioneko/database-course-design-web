@@ -1,4 +1,12 @@
-import { Button, Form, Input, message, Modal, Table } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  message as antdMessage,
+  Modal,
+  Popover,
+  Table,
+} from "antd";
 import axios from "axios";
 import { NextPage } from "next";
 import { useState } from "react";
@@ -12,25 +20,21 @@ import {
 import BookAdd from "../../components/BookAdd";
 import { AdminLayout } from "../../components/Layout";
 import usePaginationParams from "../../hooks/usePaginationParams";
+import message from "../../common/message.json";
 
 function useBorrowReturn() {
-  const [inActionBook, setInActionBook] = useState<
-    { isbn: string; action: "borrow" | "return" } | undefined
-  >(undefined);
   const queryClient = useQueryClient();
+  const onSuccess = () => {
+    queryClient.invalidateQueries("books");
+    antdMessage.success(message.success);
+  };
 
   const borrowMutation = useMutation(
     async (body: BookBorrowRequest) => {
       const res = await axios.post("/api/borrow", body);
       return res.data;
     },
-    {
-      onSuccess: () => {
-        setInActionBook(undefined);
-        queryClient.invalidateQueries("books");
-        message.success("Success");
-      },
-    }
+    { onSuccess }
   );
 
   const returnMutation = useMutation(
@@ -38,21 +42,60 @@ function useBorrowReturn() {
       const res = await axios.post("/api/return", body);
       return res.data;
     },
-    {
-      onSuccess: () => {
-        setInActionBook(undefined);
-        queryClient.invalidateQueries("books");
-        message.success("Success");
-      },
-    }
+    { onSuccess }
   );
 
   return {
-    inActionBook,
-    setInActionBook,
     borrowMutation,
     returnMutation,
   };
+}
+
+interface BookActionProps {
+  actionLabel: string;
+  actionCb: (userId: string) => Promise<void>;
+  disabled?: boolean;
+}
+
+function BookAction({
+  actionLabel,
+  actionCb,
+  disabled = false,
+}: BookActionProps) {
+  const [form] = Form.useForm();
+
+  return (
+    <Popover
+      trigger="click"
+      placement="bottomRight"
+      destroyTooltipOnHide
+      title={actionLabel}
+      content={
+        <Form
+          form={form}
+          className="flex"
+          onFinish={(values) => {
+            actionCb(values.userId).then(() => {
+              form.resetFields();
+            });
+          }}
+        >
+          <Form.Item name="userId" label="User ID" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item>
+            <Button type="link" htmlType="submit">
+              {message.confirm}
+            </Button>
+          </Form.Item>
+        </Form>
+      }
+    >
+      <Button type="link" disabled={disabled}>
+        {actionLabel}
+      </Button>
+    </Popover>
+  );
 }
 
 const BooksAdmin: NextPage = () => {
@@ -70,13 +113,12 @@ const BooksAdmin: NextPage = () => {
 
   const [openAdd, setOpenAdd] = useState(false);
 
-  const { inActionBook, setInActionBook, borrowMutation, returnMutation } =
-    useBorrowReturn();
+  const { borrowMutation, returnMutation } = useBorrowReturn();
 
   return (
     <AdminLayout>
       <Modal
-        title="Add Book"
+        title={message.addBook}
         visible={openAdd}
         footer={null}
         onCancel={() => setOpenAdd(false)}
@@ -91,7 +133,7 @@ const BooksAdmin: NextPage = () => {
         summary={() => (
           <Table.Summary.Row>
             <Table.Summary.Cell index={0} colSpan={5} className="text-right">
-              <Button onClick={() => setOpenAdd(true)}>Add</Button>
+              <Button onClick={() => setOpenAdd(true)}>{message.add}</Button>
             </Table.Summary.Cell>
           </Table.Summary.Row>
         )}
@@ -100,86 +142,26 @@ const BooksAdmin: NextPage = () => {
         <Table.Column title="Author" dataIndex="author" key="author" />
         <Table.Column title="ISBN" dataIndex="isbn" key="isbn" />
         <Table.Column title="Available" dataIndex="available" key="available" />
-        {/*TODO: nested line for actions*/}
         <Table.Column<BookInfo>
           title="Action"
           key="action"
-          render={(_, record) => {
-            if (inActionBook?.isbn === record.isbn) {
-              return (
-                <div>
-                  {inActionBook.action === "borrow" ? (
-                    <Form
-                      layout="inline"
-                      onFinish={(values) => {
-                        borrowMutation.mutate({
-                          isbn: record.isbn,
-                          userId: values.userId,
-                        });
-                      }}
-                    >
-                      <Form.Item name="userId" label="ID">
-                        <Input />
-                      </Form.Item>
-                      <Form.Item>
-                        <Button htmlType="submit" type="link">
-                          Confirm
-                        </Button>
-                      </Form.Item>
-                    </Form>
-                  ) : (
-                    <Form
-                      layout="inline"
-                      onFinish={(values) => {
-                        returnMutation.mutate({
-                          isbn: record.isbn,
-                          userId: values.userId,
-                        });
-                      }}
-                    >
-                      <Form.Item name="userId" label="ID">
-                        <Input />
-                      </Form.Item>
-                      <Form.Item>
-                        <Button htmlType="submit" type="link">
-                          Confirm
-                        </Button>
-                      </Form.Item>
-                    </Form>
-                  )}
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      setInActionBook(undefined);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              );
-            } else {
-              return (
-                <div>
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      setInActionBook({ isbn: record.isbn, action: "borrow" });
-                    }}
-                  >
-                    Borrow
-                  </Button>
-                  <Button
-                    type="link"
-                    onClick={() => {
-                      setInActionBook({ isbn: record.isbn, action: "return" });
-                    }}
-                  >
-                    Return
-                  </Button>
-                </div>
-              );
-            }
-          }}
+          render={(_, { isbn, available }) => (
+            <>
+              <BookAction
+                actionLabel={message.borrowAction}
+                actionCb={(userId) =>
+                  borrowMutation.mutateAsync({ isbn: isbn, userId })
+                }
+                disabled={available === 0}
+              />
+              <BookAction
+                actionLabel={message.returnAction}
+                actionCb={(userId) =>
+                  returnMutation.mutateAsync({ isbn: isbn, userId })
+                }
+              />
+            </>
+          )}
         />
       </Table>
     </AdminLayout>
