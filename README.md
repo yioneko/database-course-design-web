@@ -31,3 +31,22 @@ pnpm dev
   - [ ] Resturcture api queries and handlers of response
   - [ ] Split huge page components
   - [ ] Tests
+
+## API List
+
+- [ ] `GET /api/notifications`
+- [ ] `POST /api/notifications`
+- [ ] `POST /api/notifications/:id`
+- [ ] `GET /api/user/:userId/borrow`
+- [ ] `GET /api/user/:userId`
+- [ ] `POST /api/user/:userId`
+- [ ] `GET /api/user`
+- [ ] `POST /api/login`
+- [ ] `GET /api/books/:isbn/comments`
+- [ ] `POST /api/books/:isbn/comments`
+- [ ] `GET /api/books/:isbn/info`
+- [ ] `GET /api/books`
+- [ ] `POST /api/books`
+- [ ] `GET /api/transactions`
+- [ ] `POST /api/borrow`
+- [ ] `POST /api/return`
