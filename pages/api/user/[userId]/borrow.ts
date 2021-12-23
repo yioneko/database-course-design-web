@@ -1,0 +1,39 @@
+import type { NextApiRequest, NextApiResponse } from "next";
+import type {
+  UserBorrowInfoResponse,
+  UserBorrowInfoParams,
+} from "../../../../common/interface";
+import { User, Transaction } from "database-course-design-model";
+import message from "../../../../common/message.json";
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<UserBorrowInfoResponse>
+) {
+  try {
+    const { userId } = req.query as { userId: string };
+    const user = await User.selectById(userId);
+    if (user === null) return res.status(404).json({ error: message.userNF });
+    //! HTTP 404 Not Found
+    else {
+      const transactions = await Transaction.select("user_id=?", [user.id]);
+      return res.status(200).json({
+        transactions: transactions.map((transaction) => ({
+          isbn: transaction.copy.book.id,
+          title: transaction.copy.book.title,
+          author: transaction.copy.book.authors.join("\n"),
+          userId: transaction.user.id,
+          date: transaction.borrowTime.toString(),
+          dueDate: transaction.dueDate.toString(),
+          returnDate:
+            transaction.returnTime === null
+              ? undefined
+              : transaction.returnTime.toString(),
+          fine: transaction.fine, //? NaN when unavailable to count (Not returned yet)
+        })),
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({ error: (err as Error).message }); //! HTTP 500 Internal Server Error
+  }
+}
