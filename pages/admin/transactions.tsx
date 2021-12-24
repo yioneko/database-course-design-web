@@ -28,6 +28,7 @@ const TransactionsAdmin: NextPage = () => {
         dataSource={data?.transactions}
         pagination={paginationConfig(data?.pageCount)}
         loading={isFetching}
+        rowKey={({ isbn, userId, date }) => `${isbn}_${userId}_${date}`}
       >
         <Table.Column title="Title" dataIndex="title" key="title" />
         <Table.Column title="Author" dataIndex="author" key="author" />
