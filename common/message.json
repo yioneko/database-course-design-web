@@ -4,6 +4,8 @@
 
   "userNF": "User not found",
   "bookNF": "Book not found",
+  "copyNF": "Copy not found",
+  "notificationNF": "Notification not found",
 
   "wrongNameOrPwd": "Wrong username or password",
   "wrongPwd": "Wrong password",

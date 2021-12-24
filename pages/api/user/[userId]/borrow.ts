@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { UserBorrowInfoResponse } from "../../../../common/interface";
 import { User, Transaction } from "database-course-design-model";
+import { AUTHOR_SEPARATOR } from "../../../../common/constants";
 import message from "../../../../common/message.json";
 
 async function get(
@@ -15,7 +16,7 @@ async function get(
     transactions: transactions.map((transaction) => ({
       isbn: transaction.copy.book.id,
       title: transaction.copy.book.title,
-      author: transaction.copy.book.authors.join("\n"),
+      author: transaction.copy.book.authors.join(AUTHOR_SEPARATOR),
       userId: transaction.user.id,
       date: transaction.borrowTime.toString(),
       dueDate: transaction.dueDate.toString(),
