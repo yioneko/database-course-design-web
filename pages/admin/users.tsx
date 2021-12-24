@@ -1,4 +1,11 @@
-import { Button, Form, Input, message, Popover, Table } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  message as antdMessage,
+  Popover,
+  Table,
+} from "antd";
 import axios from "axios";
 import { NextPage } from "next";
 import { useContext } from "react";
@@ -11,6 +18,66 @@ import {
 import { AdminLayout } from "../../components/Layout";
 import usePaginationParams from "../../hooks/usePaginationParams";
 import UserCtx from "../../providers/user";
+import message from "../../common/message.json";
+import { SendOutlined } from "@ant-design/icons";
+
+function NotifyAction({ userId }: { userId: string }) {
+  const [form] = Form.useForm();
+  const notificationMutation = useMutation(
+    (req: NotificationSendRequest) => {
+      return axios.post("/api/notifications", req);
+    },
+    {
+      onSuccess: () => {
+        antdMessage.success(message.notified);
+        form.resetFields();
+      },
+    }
+  );
+
+  return (
+    <Popover
+      trigger="click"
+      placement="bottom"
+      destroyTooltipOnHide
+      content={
+        <Form
+          form={form}
+          onFinish={(values) => {
+            notificationMutation.mutate({
+              receiverId: userId,
+              senderId: userId,
+              message: values.message,
+            });
+          }}
+        >
+          <Form.Item
+            name="message"
+            className="mb-0"
+            rules={[{ required: true }]}
+          >
+            <Input.TextArea
+              className="resize-none"
+              placeholder="Message"
+              rows={6}
+              cols={40}
+              allowClear
+            />
+          </Form.Item>
+          <Form.Item className="mb-0 text-center">
+            <Button type="link" htmlType="submit" icon={<SendOutlined />}>
+              {message.sendAction}
+            </Button>
+          </Form.Item>
+        </Form>
+      }
+    >
+      <Button type="link" className="table-action-button">
+        {message.notifyAction}
+      </Button>
+    </Popover>
+  );
+}
 
 const UsersAdmin: NextPage = () => {
   const { paginationParams, paginationConfig } = usePaginationParams();
@@ -25,18 +92,6 @@ const UsersAdmin: NextPage = () => {
     }
   );
 
-  const [notifyForm] = Form.useForm();
-  const notificationMutation = useMutation(
-    (req: NotificationSendRequest) => {
-      return axios.post("/api/notifications", req);
-    },
-    {
-      onSuccess: () => {
-        message.success("Notification sent");
-        notifyForm.resetFields();
-      },
-    }
-  );
   const { userId } = useContext(UserCtx);
 
   if (userId === undefined) {
@@ -49,6 +104,7 @@ const UsersAdmin: NextPage = () => {
         dataSource={data?.users}
         pagination={paginationConfig(data?.pageCount)}
         loading={isFetching}
+        rowKey="userId"
       >
         <Table.Column title="User ID" dataIndex="userId" key="userId" />
         <Table.Column title="Name" dataIndex="name" key="name" />
@@ -63,35 +119,7 @@ const UsersAdmin: NextPage = () => {
         <Table.Column<UserInfo>
           title="Action"
           key="action"
-          render={(_, record) => (
-            <Popover
-              trigger="click"
-              placement="bottom"
-              content={
-                <Form
-                  form={notifyForm}
-                  onFinish={(values) => {
-                    notificationMutation.mutate({
-                      receiverId: record.userId,
-                      senderId: userId,
-                      message: values.message,
-                    });
-                  }}
-                >
-                  <Form.Item name="message" className="mb-0">
-                    <Input.TextArea placeholder="Message" />
-                  </Form.Item>
-                  <Form.Item className="mb-0">
-                    <Button type="link" htmlType="submit">
-                      Send
-                    </Button>
-                  </Form.Item>
-                </Form>
-              }
-            >
-              <Button type="link">Notify</Button>
-            </Popover>
-          )}
+          render={(_, { userId }) => <NotifyAction userId={userId} />}
         />
       </Table>
     </AdminLayout>

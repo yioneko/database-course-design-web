@@ -1,9 +1,12 @@
 import axios from "axios";
+import { useRouter } from "next/router";
+import { useContext } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   ModifyPasswordRequest,
   UserInfoSuccessResponse,
 } from "../common/interface";
+import UserCtx from "../providers/user";
 
 export function useUserDetails(userId: string | undefined) {
   return useQuery(
@@ -34,9 +37,11 @@ export function useUserNameMutation(userId: string) {
   );
 }
 
-// TODO: Logout & redirect
 export function useUserPasswordMutation(userId: string) {
   const queryClient = useQueryClient();
+  const { dispatch } = useContext(UserCtx);
+  const router = useRouter();
+
   return useMutation(
     ({ password, newPassword }: ModifyPasswordRequest) => {
       return axios.post(`/api/user/${userId}`, { password, newPassword });
@@ -44,6 +49,7 @@ export function useUserPasswordMutation(userId: string) {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["user", userId]);
+        dispatch({ type: "logout", router });
       },
     }
   );
