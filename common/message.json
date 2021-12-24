@@ -43,4 +43,12 @@
 
   "borrowAction": "Borrow",
   "returnAction": "Return",
+
+  "borrowedBooks": "Currently borrowed books",
+  "totalFine": "Total fine",
+  "payFine": "Pay fine",
+  "qr4Payment": "QR code for payment",
+  "scanQRToPay": "Scan QR code to pay",
+  "ivePaid": "I've Paid",
+  "payFineSuccess": "Fine paid successfully"
 }
