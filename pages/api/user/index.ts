@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import type {
-  UserInfo,
   UserListResponse,
   PaginationBaseRequest,
 } from "../../../common/interface";
@@ -18,14 +17,12 @@ export default async function handler(
     });
     const userCount = await User.count();
     return res.status(200).json({
-      users: users.map(
-        (user): UserInfo => ({
-          userId: user.id,
-          name: user.name,
-          isAdmin: user.isAdministrator,
-        })
-      ),
-      pageCount: userCount,
+      users: users.map((user) => ({
+        userId: user.id,
+        name: user.name,
+        isAdmin: user.isAdministrator,
+      })),
+      pageCount: userCount, //? currently row count instead of page count
     });
   } catch (err) {
     return res.status(500).json({

@@ -44,7 +44,7 @@ export interface TransactionInfo {
 export interface UserInfoParams {
   userId: string;
 }
-export type UserInfoSuccessResponse = Omit<UserInfo, "userId" | "password">;
+export type UserInfoSuccessResponse = Omit<UserInfo, "userId">;
 export type UserInfoResponse = UserInfoSuccessResponse | ErrorResponse;
 
 export interface ModifyNameRequest {
