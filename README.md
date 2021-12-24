@@ -34,9 +34,9 @@ pnpm dev # start development server
 ## API List
 
 - Notification
-  - [ ] `GET  /api/notifications`
-  - [ ] `POST /api/notifications`
-  - [ ] `POST /api/notifications/:id`
+  - [x] `GET  /api/notifications`
+  - [x] `POST /api/notifications`
+  - [x] `POST /api/notifications/:id`
 - User
   - [x] `GET  /api/user/:userId/borrow`
   - [x] `GET  /api/user/:userId`
