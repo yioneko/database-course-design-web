@@ -83,7 +83,7 @@ function BookAdd() {
         <Form.Item label="Title" name="title" rules={[{ required: true }]}>
           <Input disabled={bookExists} />
         </Form.Item>
-        <Form.List name="author">
+        <Form.List name="author" initialValue={[""]}>
           {(fields, { add, remove }) => {
             const labelSpan = 4;
             return (
