@@ -51,6 +51,6 @@ pnpm dev
   - [ ] `GET  /api/books`
   - [ ] `POST /api/books`
 - Transaction
-  - [ ] `GET  /api/transactions`
-  - [ ] `POST /api/borrow`
-  - [ ] `POST /api/return`
+  - [x] `GET  /api/transactions`
+  - [x] `POST /api/borrow`
+  - [x] `POST /api/return`
