@@ -1,6 +1,6 @@
 import { Button, Typography } from "antd";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import message from "../common/message.json";
 import useInterval from "../hooks/useInterval";
 import qrcode from "../public/qrcode4payment.png";
