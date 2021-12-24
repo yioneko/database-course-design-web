@@ -33,7 +33,7 @@ dependencies:
   '@ant-design/icons': 4.7.0_react-dom@17.0.2+react@17.0.2
   antd: 4.17.1_react-dom@17.0.2+react@17.0.2
   axios: 0.24.0
-  database-course-design-model: github.com/zsz12251665/database-course-design-model/fc2612679fd47ac22fba98ec498a9005277eda06
+  database-course-design-model: github.com/zsz12251665/database-course-design-model/804388794a772a45283ff4e2e752f6586da3915b
   date-fns: 2.26.0
   next: 12.0.4_aae888dfa296766acacf1a733aa50b3a
   react: 17.0.2
@@ -1086,12 +1086,22 @@ packages:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
     dev: true
 
+  /@types/mysql/2.15.20:
+    resolution: {integrity: sha512-QyOqSRhe540jmdg3AqiS8AbCDvSwDgxAJcsBkMqDQw0y87OQla7y8RFW/MYcUUHBFi1AZrRYkjzSAL/bfCKMuQ==}
+    dependencies:
+      '@types/node': 16.11.9
+    dev: false
+
   /@types/node/16.11.9:
     resolution: {integrity: sha512-MKmdASMf3LtPzwLyRrFjtFFZ48cMf8jmX5VRYrDQiJa8Ybu5VAmkqBWqKU8fdCwD8ysw4mQ9nrEHvzg6gunR7A==}
 
   /@types/parse-json/4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
     dev: true
+
+  /@types/pluralize/0.0.29:
+    resolution: {integrity: sha512-BYOID+l2Aco2nBik+iYS4SZX0Lf20KPILP5RGmM1IgzdwNdTs0eebiFriOPcej1sX9mLnSoiNte5zcFxssgpGA==}
+    dev: false
 
   /@types/prettier/2.4.2:
     resolution: {integrity: sha512-ekoj4qOQYp7CvjX8ZDBgN86w3MqQhLE1hczEJbEIjgFEumDy+na/4AJAbLXfgEWFNB2pKadM5rPFtuSGMWK7xA==}
@@ -1134,6 +1144,10 @@ packages:
     dependencies:
       '@types/node': 16.11.9
     dev: true
+
+  /@types/uuid/8.3.3:
+    resolution: {integrity: sha512-0LbEEx1zxrYB3pgpd1M5lEhLcXjKJnYghvhTRgaBeUivLHMDM1TzF3IJ6hXU2+8uA4Xz+5BA63mtZo5DjVT8iA==}
+    dev: false
 
   /@types/yargs-parser/20.2.1:
     resolution: {integrity: sha512-7tFImggNeNBVMsn0vLrpn1H1uPrUBdnARPTpZoitY37ZrdJREzf7I16tMrlK3hen349gr1NYh8CmZQa7CTG6Aw==}
@@ -6827,11 +6841,14 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  github.com/zsz12251665/database-course-design-model/fc2612679fd47ac22fba98ec498a9005277eda06:
-    resolution: {tarball: https://codeload.github.com/zsz12251665/database-course-design-model/tar.gz/fc2612679fd47ac22fba98ec498a9005277eda06}
+  github.com/zsz12251665/database-course-design-model/804388794a772a45283ff4e2e752f6586da3915b:
+    resolution: {tarball: https://codeload.github.com/zsz12251665/database-course-design-model/tar.gz/804388794a772a45283ff4e2e752f6586da3915b}
     name: database-course-design-model
     version: 0.0.0
     dependencies:
+      '@types/mysql': 2.15.20
+      '@types/pluralize': 0.0.29
+      '@types/uuid': 8.3.3
       mysql: 2.18.1
       pluralize: 8.0.0
       uuid: 8.3.2
