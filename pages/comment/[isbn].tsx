@@ -9,6 +9,7 @@ import CommentList, {
 import CommentEdit, { getBookInfo } from "../../components/CommentEdit";
 import { useContext } from "react";
 import UserCtx from "../../providers/user";
+import Error from "next/error";
 import { Col, Descriptions, Divider, Row, Typography } from "antd";
 
 export const getServerSideProps: GetServerSideProps<
@@ -30,7 +31,6 @@ export const getServerSideProps: GetServerSideProps<
   };
 };
 
-// TODO: Fallback to 404 page for noexisting isbn
 const CommentPage: NextPage = () => {
   const { userId } = useContext(UserCtx);
 
@@ -39,11 +39,15 @@ const CommentPage: NextPage = () => {
     getBookInfo(isbn, userId)
   );
 
+  if (data === undefined) {
+    return <Error statusCode={404} />;
+  }
+
   return (
     <div>
       <Head>
-        <title>Comments - {data?.title}</title>
-        <meta name="description" content={`Comments of ${data?.title}`} />
+        <title>Comments - {data.title}</title>
+        <meta name="description" content={`Comments of ${data.title}`} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Row className="mx-auto max-w-screen-xl mt-4">
@@ -54,20 +58,20 @@ const CommentPage: NextPage = () => {
                 level={4}
                 className="!text-blue-600 whitespace-normal"
               >
-                {data?.title}
+                {data.title}
               </Typography.Title>
             }
             className="border-2 bg-purple-200 p-4 mr-6"
             column={{ xxl: 3, xl: 2, lg: 1, md: 1, sm: 1, xs: 1 }}
           >
             <Descriptions.Item label="Author">
-              <Typography.Text strong>{data?.author}</Typography.Text>
+              <Typography.Text strong>{data.author}</Typography.Text>
             </Descriptions.Item>
             <Descriptions.Item label="ISBN">
               <Typography.Text strong>{isbn}</Typography.Text>
             </Descriptions.Item>
             <Descriptions.Item label="Available">
-              <Typography.Text strong>{data?.available}</Typography.Text>
+              <Typography.Text strong>{data.available}</Typography.Text>
             </Descriptions.Item>
           </Descriptions>
         </Col>

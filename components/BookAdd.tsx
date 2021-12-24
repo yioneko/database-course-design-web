@@ -54,7 +54,6 @@ function BookAdd() {
 
         setTestIsbn("");
 
-        // TODO: more invalidation
         queryClient.invalidateQueries(["bookInfo", data.request.isbn]);
         queryClient.invalidateQueries("books");
       },
