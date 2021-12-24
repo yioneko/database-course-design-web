@@ -28,3 +28,11 @@ svg {
 .ant-list {
   background-color: white;
 }
+
+/* see: https://github.com/ant-design/ant-design/issues/21404#issuecomment-586800984 */
+.table-action-button,
+.table-action-button .ant-btn {
+  border: 0;
+  padding: 0;
+  height: unset;
+}

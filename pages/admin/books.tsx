@@ -5,6 +5,7 @@ import {
   message as antdMessage,
   Modal,
   Popover,
+  Space,
   Table,
 } from "antd";
 import axios from "axios";
@@ -66,7 +67,7 @@ function BookAction({
 
   return (
     <Popover
-      trigger="click"
+      trigger={disabled ? [] : "click"}
       placement="bottomRight"
       destroyTooltipOnHide
       title={actionLabel}
@@ -91,7 +92,7 @@ function BookAction({
         </Form>
       }
     >
-      <Button type="link" disabled={disabled}>
+      <Button type="link" className="table-action-button" disabled={disabled}>
         {actionLabel}
       </Button>
     </Popover>
@@ -146,7 +147,7 @@ const BooksAdmin: NextPage = () => {
           title="Action"
           key="action"
           render={(_, { isbn, available }) => (
-            <>
+            <Space direction="horizontal">
               <BookAction
                 actionLabel={message.borrowAction}
                 actionCb={(userId) =>
@@ -160,7 +161,7 @@ const BooksAdmin: NextPage = () => {
                   returnMutation.mutateAsync({ isbn: isbn, userId })
                 }
               />
-            </>
+            </Space>
           )}
         />
       </Table>
