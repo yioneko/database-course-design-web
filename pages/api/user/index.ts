@@ -22,7 +22,6 @@ export default async function handler(
         (user): UserInfo => ({
           userId: user.id,
           name: user.name,
-          password: "******", //? Sensitive data should not be shown
           isAdmin: user.isAdministrator,
         })
       ),

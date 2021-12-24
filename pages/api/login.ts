@@ -12,8 +12,13 @@ export default async function handler(
     const user = await User.selectById(userId);
     if (user === null || !user.authenticate(password))
       return res.status(401).json({ error: message.wrongNameOrPwd });
-    //? TODO: token
-    else return res.status(200).json({ isAdmin: user.isAdministrator });
+    else {
+      const token = ""; // TODO: token
+      return res
+        .status(200)
+        .setHeader("Set-Cookie", `token=${token}`)
+        .json({ isAdmin: user.isAdministrator });
+    }
   } catch (err) {
     return res.status(500).json({ error: (err as Error).message }); //! HTTP 500 Internal Server Error
   }

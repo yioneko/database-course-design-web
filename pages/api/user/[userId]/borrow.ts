@@ -1,8 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import type {
-  UserBorrowInfoResponse,
-  UserBorrowInfoParams,
-} from "../../../../common/interface";
+import type { UserBorrowInfoResponse } from "../../../../common/interface";
 import { User, Transaction } from "database-course-design-model";
 import message from "../../../../common/message.json";
 
@@ -29,7 +26,7 @@ export default async function handler(
             transaction.returnTime === null
               ? undefined
               : transaction.returnTime.toString(),
-          fine: transaction.fine, //? NaN when unavailable to count (Not returned yet)
+          fine: isNaN(transaction.fine) ? 0 : transaction.fine,
         })),
       });
     }

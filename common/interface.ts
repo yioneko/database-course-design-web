@@ -1,7 +1,6 @@
 export interface UserInfo {
   userId: string;
   name: string;
-  password: string;
   isAdmin: boolean;
 }
 
