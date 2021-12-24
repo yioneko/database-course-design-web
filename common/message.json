@@ -26,5 +26,7 @@
   "nameModified": "Name modified successfully",
 
   "pwdNotMatch": "The two passwords do not match",
-  "pwdReset": "Password reset successfully"
+  "pwdReset": "Password reset successfully",
+
+  "methodNotAllowed": "The HTTP Method of the request is not allowed"
 }
