@@ -8,7 +8,7 @@ import {
 import { Button, Input, List } from "antd";
 import axios from "axios";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery } from "react-query";
 import { BookListSuccessResponse } from "../common/interface";
 
@@ -74,7 +74,7 @@ function BookList() {
       />
       <List
         itemLayout="horizontal"
-        // TODO: potential performance issue
+        // NOTE: potential performance issue
         dataSource={data?.pages.flatMap((page) => page.books)}
         loading={isFetching}
         loadMore={

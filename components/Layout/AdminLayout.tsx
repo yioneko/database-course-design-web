@@ -37,7 +37,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     <Base
       hasSider
       routesToProps={routesToProps}
-      className="max-w-screen-xl mx-auto"
+      className="mx-auto"
       style={{ minHeight: "calc(100vh - 120px)" }}
     >
       {children}

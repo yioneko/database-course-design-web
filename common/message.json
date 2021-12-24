@@ -1,4 +1,7 @@
 {
+  "confirm": "Confirm",
+  "success": "Success",
+
   "userNF": "User not found",
   "bookNF": "Book not found",
 
@@ -28,5 +31,28 @@
   "pwdNotMatch": "The two passwords do not match",
   "pwdReset": "Password reset successfully",
 
-  "methodNotAllowed": "The HTTP Method of the request is not allowed"
+  "methodNotAllowed": "The HTTP Method of the request is not allowed",
+
+  "notified": "Notification sent",
+  "notifyAction": "Notify",
+  "sendAction": "Send",
+
+  "add": "Add",
+  "bookAdded": "Book added",
+  "addBook": "Add book",
+  "authorRequired": "Author name is required",
+  "authorNoComma": "Author name should not contain comma, add another author input field instead",
+
+  "borrowAction": "Borrow",
+  "returnAction": "Return",
+
+  "borrowedBooks": "Currently borrowed books",
+  "totalFine": "Total fine",
+  "payFine": "Pay fine",
+  "qr4Payment": "QR code for payment",
+  "scanQRToPay": "Scan QR code to pay",
+  "ivePaid": "I've Paid",
+  "payFineSuccess": "Fine paid successfully",
+
+  "commingSoon": "Coming soon"
 }

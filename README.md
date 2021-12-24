@@ -4,7 +4,8 @@ Web frontend for database course design. Checkout backend at [database-course-de
 
 ```bash
 pnpm install
-pnpm dev
+pnpm prepare # install git pre-commit hook
+pnpm dev # start development server
 ```
 
 ## Todo
@@ -16,7 +17,7 @@ pnpm dev
   - [x] Modify profile
   - [x] Read notifications
   - [x] View borrow records
-  - [ ] Pay fine
+  - [x] Pay fine (faked)
 - Admin
   - [ ] System overview
   - [x] View books, transactions, users
@@ -28,8 +29,6 @@ pnpm dev
   - [ ] Filter for all tables
   - [ ] Inplace edit for all tables
 - Code quality
-  - [ ] Resturcture api queries and handlers of response
-  - [ ] Split huge page components
   - [ ] Tests
 
 ## API List

@@ -18,7 +18,7 @@ function useAccessControl(requireAdmin: boolean = false) {
       antdMessage.error(message.mustAdmin);
       router.push("/");
     }
-  });
+  }, [isAdmin, requireAdmin, router, userId]);
 }
 
 export default useAccessControl;
