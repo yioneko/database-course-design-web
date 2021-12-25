@@ -5,6 +5,8 @@ import {
   BookAddResponse,
   BookBorrowRequest,
   BookBorrowResponse,
+  BookCopiesParams,
+  BookCopiesResponse,
   BookInfoParams,
   BookInfoResponse,
   BookListResponse,
@@ -35,7 +37,14 @@ import {
   UserListResponse,
 } from "../common/interface";
 import message from "../common/message.json";
-import { books, comments, notifications, transactions, users } from "./data";
+import {
+  books,
+  comments,
+  copies,
+  notifications,
+  transactions,
+  users,
+} from "./data";
 
 function mockPaginatedData<T>(
   data: Array<T>,
@@ -268,7 +277,7 @@ export const handlers = [
   // TODO: implement comment adding
   rest.post<CommentAddRequest, CommentAddResponse, CommentAddParams>(
     "/api/books/:isbn/comments",
-    (req, res, ctx) => {
+    (_req, res, ctx) => {
       return res(ctx.status(200));
     }
   ),
@@ -290,6 +299,32 @@ export const handlers = [
           ctx.json({
             ...maybeBook,
             borrowed: maybeBorrowed,
+          })
+        );
+      } else {
+        return res(ctx.status(404), ctx.json({ error: message.bookNF }));
+      }
+    }
+  ),
+
+  rest.get<undefined, BookCopiesResponse, BookCopiesParams>(
+    "/api/books/:isbn/copies",
+    (req, res, ctx) => {
+      const isbn = req.params.isbn;
+
+      // TODO: implement filter by params
+      // const borrowedOnly = req.url.searchParams.get("borrowedOnly") === "true";
+      // const availableOnly = req.url.searchParams.get("availableOnly") === "true";
+
+      const copiesForBooks = copies
+        .filter((v) => v.isbn === isbn)
+        .map(({ copyId }) => copyId);
+
+      if (copiesForBooks.length > 0) {
+        return res(
+          ctx.status(200),
+          ctx.json({
+            copies: copiesForBooks,
           })
         );
       } else {
@@ -320,6 +355,7 @@ export const handlers = [
 
     const maybeBook = books.find((book) => book.isbn === isbn);
     if (maybeBook) {
+      copies.push({ copyId: copies.length + 1 + "", isbn });
       maybeBook.available += 1;
     } else if (title === undefined || author === undefined) {
       return res(
@@ -366,12 +402,15 @@ export const handlers = [
   rest.post<BookBorrowRequest, BookBorrowResponse>(
     "/api/borrow",
     (req, res, ctx) => {
-      const { userId, isbn } = req.body;
+      const { userId, copyId } = req.body;
 
       const maybeUser = Object.values(users).find(
         (info) => info.userId === userId
       );
-      const maybeBook = books.find((book) => book.isbn === isbn);
+      const maybeBook = books.find(
+        (book) =>
+          book.isbn === copies.find((copy) => copy.copyId === copyId)?.isbn
+      );
 
       if (!maybeUser) {
         return res(
@@ -398,6 +437,7 @@ export const handlers = [
         transactions.push({
           userId,
           ...maybeBook,
+          copyId,
           date: format(new Date(), "yyyy-MM-dd"),
           dueDate: format(addWeeks(new Date(), 3), "yyyy-MM-dd"),
           fine: 0,
@@ -411,44 +451,33 @@ export const handlers = [
   rest.post<BookReturnRequest, BookReturnResponse>(
     "/api/return",
     (req, res, ctx) => {
-      const { userId, isbn } = req.body;
+      const { copyId } = req.body;
 
-      const maybeUser = Object.values(users).find(
-        (info) => info.userId === userId
+      const maybeTransaction = transactions.find(
+        (transaction) =>
+          transaction.copyId === copyId && transaction.returnDate === undefined
       );
-      const maybeBook = books.find((book) => book.isbn === isbn);
-
-      if (!maybeUser) {
+      if (!maybeTransaction) {
         return res(
           ctx.status(404),
           ctx.json({
-            error: message.userNF,
-          })
-        );
-      } else if (!maybeBook) {
-        return res(
-          ctx.status(404),
-          ctx.json({
-            error: message.bookNF,
+            error: message.bookNotBorrowed,
           })
         );
       } else {
-        const maybeTransaction = transactions.find(
-          (transaction) =>
-            transaction.userId === userId &&
-            transaction.isbn === isbn &&
-            transaction.returnDate === undefined
+        const maybeBook = books.find(
+          (book) => book.isbn === maybeTransaction.isbn
         );
-        if (!maybeTransaction) {
+        if (!maybeBook) {
           return res(
             ctx.status(404),
             ctx.json({
-              error: message.bookNotBorrowed,
+              error: message.bookNF,
             })
           );
         } else {
-          maybeTransaction.returnDate = format(new Date(), "yyyy-MM-dd");
           maybeBook.available += 1;
+          maybeTransaction.returnDate = format(new Date(), "yyyy-MM-dd");
           return res(ctx.status(200));
         }
       }

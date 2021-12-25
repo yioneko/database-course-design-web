@@ -1,8 +1,8 @@
 import {
   BookInfo,
-  TransactionInfo,
   CommentInfo,
   NotificationInfo,
+  TransactionInfo,
 } from "../common/interface";
 
 export const users = {
@@ -62,6 +62,7 @@ export const comments: Record<string, CommentInfo[]> = {
 export const transactions: TransactionInfo[] = [
   {
     isbn: "978-1119366447",
+    copyId: "1",
     title: "Professional JavaScript for Web Developers",
     author: "Matt Frisbie",
     userId: "123",
@@ -72,6 +73,7 @@ export const transactions: TransactionInfo[] = [
   },
   {
     isbn: "978-1119366447",
+    copyId: "2",
     title: "Professional JavaScript for Web Developers",
     author: "Matt Frisbie",
     userId: "123",
@@ -81,6 +83,7 @@ export const transactions: TransactionInfo[] = [
   },
   {
     isbn: "978-1260084504",
+    copyId: "3",
     title: "Alice in Wonderland",
     author: "Lewis Carroll",
     userId: "456",
@@ -111,5 +114,20 @@ export const notifications: NotificationInfo[] = [
     date: "2021-11-20",
     message: "Test",
     isRead: false,
+  },
+];
+
+export const copies = [
+  {
+    copyId: "1",
+    isbn: "978-1119366447",
+  },
+  {
+    copyId: "2",
+    isbn: "978-1260084504",
+  },
+  {
+    copyId: "3",
+    isbn: "979-8749522310",
   },
 ];
