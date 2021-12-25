@@ -8,7 +8,7 @@ async function post(
   res: NextApiResponse<NotificationReadResponse>
 ) {
   const { id } = req.query as { id: string };
-  const { isRead } = req.body as { isRead: boolean }; //? Not sure about this
+  const { isRead } = req.body as { isRead: boolean };
   const notification = await Notification.selectById(id);
   if (notification === null)
     return res.status(404).json({ error: message.notificationNF }); //! HTTP 404 Not Found

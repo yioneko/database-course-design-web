@@ -28,7 +28,7 @@ async function get(
       username: comment.user.id,
       date: comment.createdTime.toString(),
     })),
-    pageCount: commentCount,
+    pageCount: commentCount, //? currently row count instead of page count
   });
 }
 
