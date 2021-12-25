@@ -8,7 +8,7 @@ import {
 import { Button, Input, List } from "antd";
 import axios from "axios";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useInfiniteQuery } from "react-query";
 import { BookListSuccessResponse } from "../common/interface";
 

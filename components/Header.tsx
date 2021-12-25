@@ -34,7 +34,8 @@ function AvatarMenu(props: MenuProps) {
           icon={<PieChartOutlined />}
           className="leading-8"
         >
-          <Link href="/admin">
+          {/* TODO: The overview page is not available */}
+          <Link href={/* "/admin" */ "/admin/books"}>
             <a>Administration</a>
           </Link>
         </Menu.Item>

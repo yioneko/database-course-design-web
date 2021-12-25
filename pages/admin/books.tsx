@@ -5,6 +5,8 @@ import {
   message as antdMessage,
   Modal,
   Popover,
+  Select,
+  SelectProps,
   Space,
   Table,
 } from "antd";
@@ -14,20 +16,23 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   BookBorrowRequest,
+  BookCopiesSuccessResponse,
+  BookCopiesUrlParams,
   BookInfo,
   BookListSuccessResponse,
   BookReturnRequest,
 } from "../../common/interface";
+import message from "../../common/message.json";
 import BookAdd from "../../components/BookAdd";
 import { AdminLayout } from "../../components/Layout";
 import usePaginationParams from "../../hooks/usePaginationParams";
-import message from "../../common/message.json";
 
-function useBorrowReturn() {
+function useBorrowReturn(onScucess: () => void) {
   const queryClient = useQueryClient();
-  const onSuccess = () => {
+  const mergedOnSuccess = () => {
     queryClient.invalidateQueries("books");
     antdMessage.success(message.success);
+    onScucess();
   };
 
   const borrowMutation = useMutation(
@@ -35,7 +40,7 @@ function useBorrowReturn() {
       const res = await axios.post("/api/borrow", body);
       return res.data;
     },
-    { onSuccess }
+    { onSuccess: mergedOnSuccess }
   );
 
   const returnMutation = useMutation(
@@ -43,7 +48,7 @@ function useBorrowReturn() {
       const res = await axios.post("/api/return", body);
       return res.data;
     },
-    { onSuccess }
+    { onSuccess: mergedOnSuccess }
   );
 
   return {
@@ -52,45 +57,107 @@ function useBorrowReturn() {
   };
 }
 
-interface BookActionProps {
-  actionLabel: string;
-  actionCb: (userId: string) => Promise<void>;
-  disabled?: boolean;
+function CopySelect({
+  isbn,
+  params,
+  ...props
+}: { isbn: string; params: BookCopiesUrlParams } & SelectProps<string>) {
+  const { data: copies, isFetching } = useQuery(
+    ["bookCopies", isbn],
+    async () => {
+      const res = await axios.get<BookCopiesSuccessResponse>(
+        `/api/books/${isbn}/copies`,
+        { params }
+      );
+      return res.data.copies;
+    }
+  );
+
+  return (
+    <Select loading={isFetching} {...props}>
+      {(copies || []).map((copy) => (
+        <Select.Option key={copy} value={copy}>
+          {copy}
+        </Select.Option>
+      ))}
+    </Select>
+  );
 }
 
-function BookAction({
-  actionLabel,
-  actionCb,
-  disabled = false,
-}: BookActionProps) {
+function BorrowAction({ record }: { record: BookInfo }) {
   const [form] = Form.useForm();
+  const { borrowMutation } = useBorrowReturn(() => form.resetFields());
 
+  return (
+    <BookActionWithPopover
+      actionLabel={message.borrowAction}
+      disabled={record.available === 0}
+      content={
+        <Form<BookBorrowRequest>
+          form={form}
+          layout="inline"
+          onFinish={borrowMutation.mutate}
+        >
+          <Form.Item name="copyId" label="Copy ID" rules={[{ required: true }]}>
+            <CopySelect isbn={record.isbn} params={{ borrowedOnly: true }} />
+          </Form.Item>
+          <Form.Item name="userId" label="User ID" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              {message.confirm}
+            </Button>
+          </Form.Item>
+        </Form>
+      }
+    />
+  );
+}
+
+function ReturnAction({ record }: { record: BookInfo }) {
+  const [form] = Form.useForm();
+  const { returnMutation } = useBorrowReturn(form.resetFields);
+
+  return (
+    <BookActionWithPopover
+      actionLabel={message.returnAction}
+      content={
+        <Form<BookReturnRequest>
+          form={form}
+          layout="inline"
+          onFinish={returnMutation.mutate}
+        >
+          <Form.Item name="copyId" label="Copy ID" rules={[{ required: true }]}>
+            <CopySelect isbn={record.isbn} params={{ borrowedOnly: true }} />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              {message.confirm}
+            </Button>
+          </Form.Item>
+        </Form>
+      }
+    />
+  );
+}
+
+function BookActionWithPopover({
+  actionLabel,
+  content,
+  disabled = false,
+}: {
+  actionLabel: string;
+  content: React.ReactNode;
+  disabled?: boolean;
+}) {
   return (
     <Popover
       trigger={disabled ? [] : "click"}
       placement="bottomRight"
       destroyTooltipOnHide
       title={actionLabel}
-      content={
-        <Form
-          form={form}
-          className="flex"
-          onFinish={(values) => {
-            actionCb(values.userId).then(() => {
-              form.resetFields();
-            });
-          }}
-        >
-          <Form.Item name="userId" label="User ID" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item>
-            <Button type="link" htmlType="submit">
-              {message.confirm}
-            </Button>
-          </Form.Item>
-        </Form>
-      }
+      content={content}
     >
       <Button type="link" className="table-action-button" disabled={disabled}>
         {actionLabel}
@@ -113,8 +180,6 @@ const BooksAdmin: NextPage = () => {
   );
 
   const [openAdd, setOpenAdd] = useState(false);
-
-  const { borrowMutation, returnMutation } = useBorrowReturn();
 
   return (
     <AdminLayout>
@@ -146,21 +211,10 @@ const BooksAdmin: NextPage = () => {
         <Table.Column<BookInfo>
           title="Action"
           key="action"
-          render={(_, { isbn, available }) => (
+          render={(_, record) => (
             <Space direction="horizontal">
-              <BookAction
-                actionLabel={message.borrowAction}
-                actionCb={(userId) =>
-                  borrowMutation.mutateAsync({ isbn: isbn, userId })
-                }
-                disabled={available === 0}
-              />
-              <BookAction
-                actionLabel={message.returnAction}
-                actionCb={(userId) =>
-                  returnMutation.mutateAsync({ isbn: isbn, userId })
-                }
-              />
+              <BorrowAction record={record} />
+              <ReturnAction record={record} />
             </Space>
           )}
         />

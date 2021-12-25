@@ -99,6 +99,7 @@ const Borrowed: NextPage = () => {
         />
         <Table.Column title="Author" dataIndex="author" key="author" />
         <Table.Column title="ISBN" dataIndex="isbn" key="isbn" />
+        <Table.Column title="Copy ID" dataIndex="copyId" key="copyId" />
         <Table.Column title="Borrow Date" dataIndex="date" key="date" />
         <Table.Column
           title="Due Date"
