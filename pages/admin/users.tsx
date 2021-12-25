@@ -46,7 +46,6 @@ function NotifyAction({ userId }: { userId: string }) {
           onFinish={(values) => {
             notificationMutation.mutate({
               receiverId: userId,
-              senderId: userId,
               message: values.message,
             });
           }}
