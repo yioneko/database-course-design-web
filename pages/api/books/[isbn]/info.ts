@@ -31,7 +31,7 @@ async function get(
   const { userId } = verifyToken(req.cookies.token) as { userId?: string };
   if (userId !== undefined) {
     const transactionCount = await Transaction.count(
-      "`user_id`=? AND `copy_book_id`=? AND `returnTime` IS NULL",
+      "`user_id`=? AND `copy_book_id`=?",
       [userId, book.id]
     );
     result.borrowed = transactionCount > 0;
