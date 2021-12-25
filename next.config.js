@@ -11,5 +11,6 @@ module.exports = withTM({
     MYSQL_DATABASE: "",
     SALT_LENGTH: 16,
     HASH_ALGORITHM: "sha512",
+    JWT_SECRET: "",
   },
 });

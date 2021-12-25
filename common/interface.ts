@@ -132,7 +132,6 @@ export interface CommentListParams {
 }
 
 export interface CommentAddRequest {
-  userId: string; // TODO: Remove this once token support is added
   comment: string;
   date: string;
 }

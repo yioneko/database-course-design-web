@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { LoginRequest, LoginResponse } from "../../common/interface";
 import { User } from "database-course-design-model";
 import message from "../../common/message.json";
+import jwt from "jsonwebtoken";
 
 async function post(req: NextApiRequest, res: NextApiResponse<LoginResponse>) {
   const { userId, password } = req.body as LoginRequest;
@@ -9,7 +10,11 @@ async function post(req: NextApiRequest, res: NextApiResponse<LoginResponse>) {
   if (user === null || !user.authenticate(password))
     return res.status(401).json({ error: message.wrongNameOrPwd });
   else {
-    const token = ""; // TODO: token
+    const token = jwt.sign(
+      { userId: user.id },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "2h" }
+    );
     return res
       .status(200)
       .setHeader("Set-Cookie", `token=${token}`)
