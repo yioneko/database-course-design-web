@@ -194,7 +194,7 @@ const BooksAdmin: NextPage = () => {
       <Table
         dataSource={data?.books}
         rowKey="isbn"
-        pagination={paginationConfig(data?.pageCount)}
+        pagination={paginationConfig(data?.total)}
         loading={isFetching}
         summary={() => (
           <Table.Summary.Row>

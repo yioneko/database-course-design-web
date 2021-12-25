@@ -101,7 +101,7 @@ const UsersAdmin: NextPage = () => {
     <AdminLayout>
       <Table
         dataSource={data?.users}
-        pagination={paginationConfig(data?.pageCount)}
+        pagination={paginationConfig(data?.total)}
         loading={isFetching}
         rowKey="userId"
       >

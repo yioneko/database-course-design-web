@@ -30,3 +30,26 @@ pnpm dev # start development server
   - [ ] Inplace edit for all tables
 - Code quality
   - [ ] Tests
+
+## API List
+
+- Notification
+  - [x] `GET  /api/notifications`
+  - [x] `POST /api/notifications`
+  - [x] `POST /api/notifications/:id`
+- User
+  - [x] `GET  /api/user/:userId/borrow`
+  - [x] `GET  /api/user/:userId`
+  - [x] `POST /api/user/:userId`
+  - [x] `GET  /api/user`
+  - [x] `POST /api/login`
+- Book
+  - [x] `GET  /api/books/:isbn/comments`
+  - [x] `POST /api/books/:isbn/comments`
+  - [x] `GET  /api/books/:isbn/info`
+  - [x] `GET  /api/books`
+  - [x] `POST /api/books`
+- Transaction
+  - [x] `GET  /api/transactions`
+  - [x] `POST /api/borrow`
+  - [x] `POST /api/return`

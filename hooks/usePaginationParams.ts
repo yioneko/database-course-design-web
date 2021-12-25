@@ -14,12 +14,10 @@ function usePaginationParams(initialParams?: Partial<PaginationBaseRequest>) {
     });
   };
 
-  const paginationConfig = (pageCount?: number) => {
+  const paginationConfig = (total?: number) => {
     return {
       onChange: onAntdPaginationChange,
-      // TODO: the total number of items is not available in the response
-      total:
-        pageCount === undefined ? 0 : pageCount * paginationParams.pageLimit,
+      total: total,
     };
   };
 

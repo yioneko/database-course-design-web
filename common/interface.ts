@@ -1,7 +1,6 @@
 export interface UserInfo {
   userId: string;
   name: string;
-  password: string;
   isAdmin: boolean;
 }
 
@@ -45,7 +44,7 @@ export interface TransactionInfo {
 export interface UserInfoParams {
   userId: string;
 }
-export type UserInfoSuccessResponse = Omit<UserInfo, "userId" | "passowrd">;
+export type UserInfoSuccessResponse = Omit<UserInfo, "userId">;
 export type UserInfoResponse = UserInfoSuccessResponse | ErrorResponse;
 
 export interface ModifyNameRequest {
@@ -133,8 +132,7 @@ export interface CommentListParams {
 }
 
 export interface CommentAddRequest {
-  isbn: string;
-  userId: number;
+  userId: string; // TODO: Remove this once token support is added
   comment: string;
   date: string;
 }
@@ -187,7 +185,7 @@ export interface PaginationBaseRequest {
 }
 
 interface PaginationBaseResponse {
-  pageCount: number;
+  total: number;
 }
 
 export interface ErrorResponse {
