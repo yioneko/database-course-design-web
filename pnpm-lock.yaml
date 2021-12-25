@@ -21,6 +21,7 @@ specifiers:
   lint-staged: ^12.1.2
   msw: ^0.35.0
   next: 12.0.4
+  next-transpile-modules: ^9.0.0
   postcss: ^8.3.11
   prettier: ^2.4.1
   react: 17.0.2
@@ -33,7 +34,7 @@ dependencies:
   '@ant-design/icons': 4.7.0_react-dom@17.0.2+react@17.0.2
   antd: 4.17.1_react-dom@17.0.2+react@17.0.2
   axios: 0.24.0
-  database-course-design-model: github.com/zsz12251665/database-course-design-model/ce50ab8ea8c05862062195420750104c8ba7beb1
+  database-course-design-model: github.com/zsz12251665/database-course-design-model/19e64c2def1f657e61f08d0a63bdb4035e05a834
   date-fns: 2.26.0
   next: 12.0.4_aae888dfa296766acacf1a733aa50b3a
   react: 17.0.2
@@ -55,6 +56,7 @@ devDependencies:
   jest: 27.3.1
   lint-staged: 12.1.2
   msw: 0.35.0
+  next-transpile-modules: 9.0.0
   postcss: 8.3.11
   prettier: 2.4.1
   tailwindcss: 2.2.19_0c54bdadaf9d9c9c6c134cb2c6c061a3
@@ -2443,6 +2445,14 @@ packages:
       iconv-lite: 0.6.3
     dev: false
 
+  /enhanced-resolve/5.8.3:
+    resolution: {integrity: sha512-EGAbGvH7j7Xt2nc0E7D99La1OiEs8LnyimkRgwExpUMScN6O+3x9tIWs7PLQZVNx4YD+00skHXPXi1yQHpAmZA==}
+    engines: {node: '>=10.13.0'}
+    dependencies:
+      graceful-fs: 4.2.8
+      tapable: 2.2.1
+    dev: true
+
   /enquirer/2.3.6:
     resolution: {integrity: sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg==}
     engines: {node: '>=8.6'}
@@ -4524,6 +4534,13 @@ packages:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}
     dev: true
 
+  /next-transpile-modules/9.0.0:
+    resolution: {integrity: sha512-VCNFOazIAnXn1hvgYYSTYMnoWgKgwlYh4lm1pKbSfiB3kj5ZYLcKVhfh3jkPOg1cnd9DP+pte9yCUocdPEUBTQ==}
+    dependencies:
+      enhanced-resolve: 5.8.3
+      escalade: 3.1.1
+    dev: true
+
   /next/12.0.4_aae888dfa296766acacf1a733aa50b3a:
     resolution: {integrity: sha512-1pvjcSZBm5OLoGmDhp4JwKwIE798WbqUNLuyU7w6a2jUkdWaxOYtkE/ROXQTi2pXHj7+6rm68AvhxROLX2NHQg==}
     engines: {node: '>=12.22.0'}
@@ -6364,6 +6381,11 @@ packages:
       - ts-node
     dev: true
 
+  /tapable/2.2.1:
+    resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
+    engines: {node: '>=6'}
+    dev: true
+
   /terminal-link/2.1.1:
     resolution: {integrity: sha512-un0FmiRUQNr5PJqy9kP7c40F5BOfpGlYTrxonDChEZB7pzZxRNp/bt+ymiy9/npwXya9KH99nJ/GXFIiUkYGFQ==}
     engines: {node: '>=8'}
@@ -6841,8 +6863,8 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  github.com/zsz12251665/database-course-design-model/ce50ab8ea8c05862062195420750104c8ba7beb1:
-    resolution: {tarball: https://codeload.github.com/zsz12251665/database-course-design-model/tar.gz/ce50ab8ea8c05862062195420750104c8ba7beb1}
+  github.com/zsz12251665/database-course-design-model/19e64c2def1f657e61f08d0a63bdb4035e05a834:
+    resolution: {tarball: https://codeload.github.com/zsz12251665/database-course-design-model/tar.gz/19e64c2def1f657e61f08d0a63bdb4035e05a834}
     name: database-course-design-model
     version: 0.0.0
     dependencies:

@@ -8,10 +8,12 @@ import UserCtx, { useUserCtxProvider } from "../providers/user";
 import "../styles/globals.css";
 import handleQueryError from "../utils/handleQueryError";
 
+/*
 if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
   const { worker } = require("../mocks/browser");
   worker.start();
 }
+*/
 
 const { Content } = Layout;
 
