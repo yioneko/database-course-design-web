@@ -37,9 +37,9 @@ async function post(
   res: NextApiResponse<CommentAddResponse>
 ) {
   //! comment adding is implemented
-  const { isbn } = req.query as { isbn: string }; //? ISBN could be extracted from URL, so ISBN in the payload is redundant
+  const { isbn } = req.query as { isbn: string };
   const { userId, comment: content, date } = req.body as CommentAddRequest;
-  const user = await User.selectById(String(userId)); //? Someone must have forget to fix this userId as string 😂
+  const user = await User.selectById(userId);
   if (user === null) return res.status(404).json({ error: message.userNF });
   const book = await Book.selectById(isbn);
   if (book === null) return res.status(404).json({ error: message.bookNF });
