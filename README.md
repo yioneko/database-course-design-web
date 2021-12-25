@@ -12,7 +12,7 @@ pnpm dev # start development server
 
 - User
   - [x] User login
-  - [ ] Token authentication
+  - [x] Token authentication
   - [x] Book list and comments
   - [x] Modify profile
   - [x] Read notifications

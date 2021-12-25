@@ -10,7 +10,7 @@ async function get(
   const { isbn } = req.query as { isbn: string };
   const book = await Book.selectById(isbn);
   if (book === null) return res.status(404).json({ error: message.bookNF });
-  const copies = await Copy.select("`book_id=?`", [book.id]);
+  const copies = await Copy.select("`book_id`=?", [book.id]);
   return res.status(200).json({
     copies: copies.map((copy) => copy.id),
   });
