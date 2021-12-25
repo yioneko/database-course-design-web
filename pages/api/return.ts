@@ -13,7 +13,7 @@ async function post(
   const copy = await Copy.selectById(copyId);
   if (copy === null) return res.status(404).json({ error: message.copyNF });
   const transactions = await Transaction.select(
-    "`user_id`=? AND `copy_id`=? AND `returnDate` IS NULL",
+    "`user_id`=? AND `copy_id`=? AND `returnTime` IS NULL",
     [user.id, copy.id]
   );
   if (transactions.length === 0)
