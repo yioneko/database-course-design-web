@@ -41,12 +41,14 @@ pnpm dev # start development server
   - [x] `GET  /api/user/:userId/borrow`
   - [x] `GET  /api/user/:userId`
   - [x] `POST /api/user/:userId`
+  - [ ] `GET  /api/user/:userId/paid`
   - [x] `GET  /api/user`
   - [x] `POST /api/login`
 - Book
   - [x] `GET  /api/books/:isbn/comments`
   - [x] `POST /api/books/:isbn/comments`
   - [x] `GET  /api/books/:isbn/info`
+  - [ ] `GET  /api/books/:isbn/copies`
   - [x] `GET  /api/books`
   - [x] `POST /api/books`
 - Transaction
