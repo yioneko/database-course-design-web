@@ -19,12 +19,12 @@ async function get(
       title: transaction.copy.book.title,
       author: transaction.copy.book.authors.join(AUTHOR_SEPARATOR),
       userId: transaction.user.id,
-      date: transaction.borrowDate.toString(),
-      dueDate: transaction.dueDate.toString(),
+      date: transaction.borrowDate.toDateString(),
+      dueDate: transaction.dueDate.toDateString(),
       returnDate:
         transaction.returnDate === null
           ? undefined
-          : transaction.returnDate.toString(),
+          : transaction.returnDate.toDateString(),
       fine: isNaN(transaction.fine) ? 0 : transaction.fine,
     })),
   });

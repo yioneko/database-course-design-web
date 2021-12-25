@@ -20,7 +20,7 @@ async function post(
     return res.status(400).json({ error: message.bookNotAvailable });
   const transaction = new Transaction(user, copy);
   await transaction.insert();
-  return res.status(200).json({ dueDate: transaction.dueDate.toString() });
+  return res.status(200).json({ dueDate: transaction.dueDate.toDateString() });
 }
 
 export default async function handler(
