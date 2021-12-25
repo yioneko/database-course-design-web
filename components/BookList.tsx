@@ -55,7 +55,7 @@ function BookList() {
       {
         keepPreviousData: true,
         getNextPageParam: (lastPage, allPages) =>
-          allPages.length < lastPage.pageCount ? allPages.length : undefined,
+          allPages.length < lastPage.total ? allPages.length : undefined,
       }
     );
 

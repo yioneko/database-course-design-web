@@ -28,7 +28,7 @@ async function get(
       author: book.authors.join(AUTHOR_SEPARATOR),
       available: NaN, //? The usage of the field should be changed since the borrow is copy-based
     })),
-    pageCount: bookCount, //? currently row count instead of page count
+    total: bookCount,
   });
 }
 

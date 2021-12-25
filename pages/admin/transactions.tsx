@@ -26,7 +26,7 @@ const TransactionsAdmin: NextPage = () => {
     <AdminLayout>
       <Table
         dataSource={data?.transactions}
-        pagination={paginationConfig(data?.pageCount)}
+        pagination={paginationConfig(data?.total)}
         loading={isFetching}
         rowKey={({ isbn, userId, date }) => `${isbn}_${userId}_${date}`}
       >

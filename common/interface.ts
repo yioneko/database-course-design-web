@@ -186,7 +186,7 @@ export interface PaginationBaseRequest {
 }
 
 interface PaginationBaseResponse {
-  pageCount: number;
+  total: number;
 }
 
 export interface ErrorResponse {

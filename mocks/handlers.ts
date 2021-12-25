@@ -54,9 +54,9 @@ function mockPaginatedData<T>(
   if (data.length > 0 && offset >= data.length * repeat) {
     throw new Error(message.pageOutOfRange);
   }
-  const pageCount = Math.ceil((data.length * repeat) / pageLimit);
+  const total = data.length * repeat;
   return {
-    pageCount,
+    total,
     data: Array(repeat)
       .fill(data)
       .flat()
@@ -215,7 +215,7 @@ export const handlers = [
       );
       return res(
         ctx.status(200),
-        ctx.json({ users: paginated.data, pageCount: paginated.pageCount })
+        ctx.json({ users: paginated.data, total: paginated.total })
       );
     } catch (err) {
       return res(ctx.status(400), ctx.json({ error: (err as Error).message }));
@@ -259,7 +259,7 @@ export const handlers = [
             ctx.status(200),
             ctx.json({
               comments: paginated.data,
-              pageCount: paginated.pageCount,
+              total: paginated.total,
             })
           );
         } catch (err) {
@@ -343,7 +343,7 @@ export const handlers = [
       );
       return res(
         ctx.status(200),
-        ctx.json({ books: paginated.data, pageCount: paginated.pageCount })
+        ctx.json({ books: paginated.data, total: paginated.total })
       );
     } catch (err) {
       return res(ctx.status(400), ctx.json({ error: (err as Error).message }));
@@ -387,7 +387,7 @@ export const handlers = [
           ctx.status(200),
           ctx.json({
             transactions: paginated.data,
-            pageCount: paginated.pageCount,
+            total: paginated.total,
           })
         );
       } catch (err) {

@@ -32,7 +32,7 @@ async function get(
           : transaction.returnTime.toString(),
       fine: isNaN(transaction.fine) ? 0 : transaction.fine,
     })),
-    pageCount: transactionCount, //? currently row count instead of page count
+    total: transactionCount,
   });
 }
 

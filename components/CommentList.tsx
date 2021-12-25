@@ -42,7 +42,7 @@ function CommentList({ isbn }: { isbn: string }) {
       itemLayout="vertical"
       loading={isFetching}
       dataSource={data?.comments}
-      pagination={paginationConfig(data?.pageCount)}
+      pagination={paginationConfig(data?.total)}
       renderItem={(item) => {
         return (
           <List.Item>

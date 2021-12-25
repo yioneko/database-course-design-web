@@ -22,7 +22,7 @@ async function get(
       name: user.name,
       isAdmin: user.isAdministrator,
     })),
-    pageCount: userCount, //? currently row count instead of page count
+    total: userCount,
   });
 }
 
