@@ -58,14 +58,10 @@ const Notifications: NextPage = () => {
               )
             }
           >
-            <Typography.Text className="text-primary">
-              {item.sender}
-            </Typography.Text>
-            <Typography.Text type="secondary">
-              {" "}
-              sent at {item.date}
-            </Typography.Text>
             <Typography.Paragraph>{item.message}</Typography.Paragraph>
+            <Typography.Text className="text-purple-400">
+              {item.date}
+            </Typography.Text>
           </List.Item>
         )}
       />

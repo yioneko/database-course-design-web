@@ -19,7 +19,6 @@ export interface CommentInfo {
 
 export interface NotificationInfo {
   id: string;
-  sender: string;
   receiver: string;
   date: string;
   message: string;
@@ -28,6 +27,7 @@ export interface NotificationInfo {
 
 export interface TransactionInfo {
   isbn: string;
+  copyId: string;
   title: string;
   author: string;
   userId: string;
@@ -84,6 +84,19 @@ export interface BookInfoParams {
   isbn: string;
 }
 
+// NOTE: The url param type is hard to use and defined just for clarification
+export type BookCopiesUrlParams =
+  | { borrowedOnly: boolean }
+  | { availableOnly: boolean }
+  | undefined;
+export interface BookCopiesSuccessResponse {
+  copies: string[];
+}
+export type BookCopiesResponse = BookCopiesSuccessResponse | ErrorResponse;
+export interface BookCopiesParams {
+  isbn: string;
+}
+
 export interface BookListSuccessResponse extends PaginationBaseResponse {
   books: BookInfo[];
 }
@@ -96,7 +109,7 @@ export interface BookAddRequest
 export type BookAddResponse = ErrorResponse | undefined;
 
 export interface BookBorrowRequest {
-  isbn: string;
+  copyId: string;
   userId: string;
 }
 export type BookBorrowResponse =
@@ -106,8 +119,7 @@ export type BookBorrowResponse =
     };
 
 export interface BookReturnRequest {
-  isbn: string;
-  userId: string;
+  copyId: string;
 }
 export type BookReturnResponse = ErrorResponse | undefined;
 
@@ -144,7 +156,6 @@ export interface NotificationReadParams {
 export type NotificationReadResponse = ErrorResponse | undefined;
 
 export interface NotificationSendRequest {
-  senderId: string;
   receiverId: string;
   message: string;
 }

@@ -1,3 +1,4 @@
+import { SendOutlined } from "@ant-design/icons";
 import {
   Button,
   Form,
@@ -15,11 +16,10 @@ import {
   UserInfo,
   UserListSuccessResponse,
 } from "../../common/interface";
+import message from "../../common/message.json";
 import { AdminLayout } from "../../components/Layout";
 import usePaginationParams from "../../hooks/usePaginationParams";
 import UserCtx from "../../providers/user";
-import message from "../../common/message.json";
-import { SendOutlined } from "@ant-design/icons";
 
 function NotifyAction({ userId }: { userId: string }) {
   const [form] = Form.useForm();
@@ -46,7 +46,6 @@ function NotifyAction({ userId }: { userId: string }) {
           onFinish={(values) => {
             notificationMutation.mutate({
               receiverId: userId,
-              senderId: userId,
               message: values.message,
             });
           }}
