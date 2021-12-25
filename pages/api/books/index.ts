@@ -16,10 +16,14 @@ async function get(
   const { offset, pageLimit, filter } = req.query as Partial<
     PaginationBaseRequest & { filter: string }
   >;
-  const books = await Book.select(filter, undefined, {
-    limit: pageLimit,
-    offset,
-  }); //? filter is not implemented yet
+  const books = await Book.select(
+    "MATCH(`title`, `authors`) AGAINST (?)",
+    [filter],
+    {
+      limit: pageLimit,
+      offset,
+    }
+  );
   const bookCount = await Book.count(filter);
   return res.status(200).json({
     books: books.map((book) => ({
