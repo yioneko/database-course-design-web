@@ -33,7 +33,7 @@ dependencies:
   '@ant-design/icons': 4.7.0_react-dom@17.0.2+react@17.0.2
   antd: 4.17.1_react-dom@17.0.2+react@17.0.2
   axios: 0.24.0
-  database-course-design-model: github.com/zsz12251665/database-course-design-model/804388794a772a45283ff4e2e752f6586da3915b
+  database-course-design-model: github.com/zsz12251665/database-course-design-model/ce50ab8ea8c05862062195420750104c8ba7beb1
   date-fns: 2.26.0
   next: 12.0.4_aae888dfa296766acacf1a733aa50b3a
   react: 17.0.2
@@ -6841,8 +6841,8 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  github.com/zsz12251665/database-course-design-model/804388794a772a45283ff4e2e752f6586da3915b:
-    resolution: {tarball: https://codeload.github.com/zsz12251665/database-course-design-model/tar.gz/804388794a772a45283ff4e2e752f6586da3915b}
+  github.com/zsz12251665/database-course-design-model/ce50ab8ea8c05862062195420750104c8ba7beb1:
+    resolution: {tarball: https://codeload.github.com/zsz12251665/database-course-design-model/tar.gz/ce50ab8ea8c05862062195420750104c8ba7beb1}
     name: database-course-design-model
     version: 0.0.0
     dependencies:
