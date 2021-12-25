@@ -177,6 +177,16 @@ export type TransactionListResponse =
   | TransactionListSuccessResponse
   | ErrorResponse;
 
+export interface FinePaidCheckParams {
+  userId: string;
+}
+export interface FinePaidCheckSuccessResponse {
+  isPaid: boolean;
+}
+export type FinePaidCheckResponse =
+  | FinePaidCheckSuccessResponse
+  | ErrorResponse;
+
 /* General auxialiary types */
 // this is attached in url params
 export interface PaginationBaseRequest {

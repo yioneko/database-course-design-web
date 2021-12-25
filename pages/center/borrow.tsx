@@ -13,7 +13,7 @@ import { CenterLayout } from "../../components/Layout";
 import PayFine from "../../components/PayFine";
 import UserCtx from "../../providers/user";
 
-function PayFineAction({ fine }: { fine: number }) {
+function PayFineAction() {
   const [popup, setPopup] = useState(false);
 
   const onFinish = () => {
@@ -32,7 +32,7 @@ function PayFineAction({ fine }: { fine: number }) {
           setPopup(false);
         }}
       >
-        <PayFine fine={fine} onFinish={onFinish} />
+        <PayFine onFinish={onFinish} />
       </Modal>
       <Button
         type="primary"
@@ -78,10 +78,12 @@ const Borrowed: NextPage = () => {
               <Table.Summary.Cell index={1} colSpan={2}>
                 {message.totalFine}
                 {": "}
-                <Typography.Text type="danger">
+                <Typography.Text
+                  type={totalFine === 0 ? "secondary" : "danger"}
+                >
                   {totalFine}
                 </Typography.Text>{" "}
-                <PayFineAction fine={totalFine} />
+                <PayFineAction />
               </Table.Summary.Cell>
             </Table.Summary.Row>
           );

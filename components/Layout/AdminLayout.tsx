@@ -30,7 +30,7 @@ const routesToProps = {
   },
 };
 
-export function AdminLayout({ children }: { children: React.ReactNode }) {
+export function AdminLayout({ children }: { children?: React.ReactNode }) {
   useAccessControl(true);
 
   return (

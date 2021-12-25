@@ -12,8 +12,8 @@ const Profile: NextPage = () => {
   const { userId, isAdmin } = useContext(UserCtx);
   const { data } = useUserDetails(userId);
 
-  if (!userId) {
-    return <></>;
+  if (userId === undefined) {
+    return <CenterLayout />;
   }
 
   return (

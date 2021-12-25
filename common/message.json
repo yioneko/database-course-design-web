@@ -55,6 +55,7 @@
   "scanQRToPay": "Scan QR code to pay",
   "ivePaid": "I've Paid",
   "payFineSuccess": "Fine paid successfully",
+  "notPaid": "Not paid",
 
   "commingSoon": "Coming soon"
 }
