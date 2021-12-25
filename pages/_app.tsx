@@ -1,11 +1,11 @@
-import "antd/dist/antd.variable.min.css";
-import "../styles/globals.css";
-import type { AppProps } from "next/app";
-import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
-import UserCtx, { useUserCtxProvider } from "../providers/user";
 import { ConfigProvider, Layout, message } from "antd";
+import "antd/dist/antd.variable.min.css";
+import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
+import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import Header from "../components/Header";
+import UserCtx, { useUserCtxProvider } from "../providers/user";
+import "../styles/globals.css";
 import handleQueryError from "../utils/handleQueryError";
 
 if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
@@ -22,6 +22,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       new QueryClient({
         defaultOptions: {
           queries: {
+            onError: (err) => handleQueryError(err, message.error),
+          },
+          mutations: {
             onError: (err) => handleQueryError(err, message.error),
           },
         },

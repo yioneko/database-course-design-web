@@ -33,6 +33,7 @@ const TransactionsAdmin: NextPage = () => {
         <Table.Column title="Title" dataIndex="title" key="title" />
         <Table.Column title="Author" dataIndex="author" key="author" />
         <Table.Column title="ISBN" dataIndex="isbn" key="isbn" />
+        <Table.Column title="Copy ID" dataIndex="copyId" key="copyId" />
         <Table.Column title="User ID" dataIndex="userId" key="userId" />
         <Table.Column title="Date" dataIndex="date" key="date" />
         <Table.Column title="Due Date" dataIndex="dueDate" key="dueDate" />
