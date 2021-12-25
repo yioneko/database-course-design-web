@@ -15,6 +15,8 @@ import {
   CommentAddResponse,
   CommentListParams,
   CommentListResponse,
+  FinePaidCheckParams,
+  FinePaidCheckResponse,
   LoginRequest,
   LoginResponse,
   ModifyUserParams,
@@ -146,6 +148,32 @@ export const handlers = [
     }
   ),
 
+  rest.get<undefined, FinePaidCheckResponse, FinePaidCheckParams>(
+    "/api/user/:userId/paid",
+    (req, res, ctx) => {
+      const { userId } = req.params;
+      const maybeUser = Object.values(users).find(
+        (info) => info.userId === userId
+      );
+      if (!maybeUser) {
+        return res(
+          ctx.status(404),
+          ctx.json({
+            error: message.userNF,
+          })
+        );
+      } else {
+        // assume all paid, update fine of all transactions
+        transactions.forEach((v) => {
+          if (v.userId === userId) {
+            v.fine = 0;
+          }
+        });
+        return res(ctx.status(200), ctx.json({ isPaid: true }));
+      }
+    }
+  ),
+
   rest.get<undefined, UserInfoResponse, UserInfoParams>(
     "/api/user/:userId",
     (req, res, ctx) => {
@@ -272,9 +300,7 @@ export const handlers = [
   // TODO: implement comment adding
   rest.post<CommentAddRequest, CommentAddResponse, CommentAddParams>(
     "/api/books/:isbn/comments",
-    (req, res, ctx) => {
-      const isbn = req.params.isbn;
-
+    (_req, res, ctx) => {
       return res(ctx.status(200));
     }
   ),

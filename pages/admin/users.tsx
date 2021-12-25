@@ -95,7 +95,7 @@ const UsersAdmin: NextPage = () => {
   const { userId } = useContext(UserCtx);
 
   if (userId === undefined) {
-    return <div>Access denied</div>;
+    return <AdminLayout />;
   }
 
   return (

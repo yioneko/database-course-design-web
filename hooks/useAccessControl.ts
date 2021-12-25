@@ -8,8 +8,6 @@ function useAccessControl(requireAdmin: boolean = false) {
   const { userId, isAdmin } = useContext(UserCtx);
   const router = useRouter();
 
-  // block rendering
-  // FIXME: duplicate messages on logout
   useLayoutEffect(() => {
     if (userId === undefined) {
       antdMessage.error(message.mustLogin);

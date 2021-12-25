@@ -24,7 +24,7 @@ const routesToProps = {
   },
 };
 
-export function CenterLayout({ children }: { children: React.ReactNode }) {
+export function CenterLayout({ children }: { children?: React.ReactNode }) {
   useAccessControl();
 
   return (
