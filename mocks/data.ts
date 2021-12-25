@@ -93,7 +93,6 @@ export const transactions: TransactionInfo[] = [
 export const notifications: NotificationInfo[] = [
   {
     id: "1",
-    sender: "Admin",
     receiver: "User",
     date: "1970-01-01",
     message: "You have a new message",
@@ -101,7 +100,6 @@ export const notifications: NotificationInfo[] = [
   },
   {
     id: "2",
-    sender: "Admin",
     receiver: "User",
     date: "2021-10-10",
     message: "Please return the book",
@@ -109,7 +107,6 @@ export const notifications: NotificationInfo[] = [
   },
   {
     id: "3",
-    sender: "Admin",
     receiver: "User",
     date: "2021-11-20",
     message: "Test",

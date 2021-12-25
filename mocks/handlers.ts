@@ -99,10 +99,7 @@ export const handlers = [
       const maybeReceiver = Object.values(users).find(
         (info) => info.userId === notification.receiverId
       );
-      const maybeSender = Object.values(users).find(
-        (info) => info.userId === notification.senderId
-      );
-      if (!maybeReceiver || !maybeSender) {
+      if (!maybeReceiver) {
         return res(
           ctx.status(404),
           ctx.json({
@@ -112,7 +109,6 @@ export const handlers = [
       } else {
         notifications.push({
           id: "" + notifications.length,
-          sender: maybeSender.name,
           receiver: maybeReceiver.name,
           date: format(new Date(), "yyyy-MM-dd"),
           message: notification.message,
@@ -273,8 +269,6 @@ export const handlers = [
   rest.post<CommentAddRequest, CommentAddResponse, CommentAddParams>(
     "/api/books/:isbn/comments",
     (req, res, ctx) => {
-      const isbn = req.params.isbn;
-
       return res(ctx.status(200));
     }
   ),

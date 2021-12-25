@@ -20,7 +20,6 @@ export interface CommentInfo {
 
 export interface NotificationInfo {
   id: string;
-  sender: string;
   receiver: string;
   date: string;
   message: string;
@@ -145,7 +144,6 @@ export interface NotificationReadParams {
 export type NotificationReadResponse = ErrorResponse | undefined;
 
 export interface NotificationSendRequest {
-  senderId: string;
   receiverId: string;
   message: string;
 }
