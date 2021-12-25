@@ -18,7 +18,7 @@ async function get(
   };
   if (userId !== undefined) {
     const transactionCount = await Transaction.count(
-      "`user_id`=? AND `copy_book_id`=? AND `returnTime` IS NULL",
+      "`user_id`=? AND `copy_book_id`=?",
       [userId, book.id]
     );
     result.borrowed = transactionCount > 0;
