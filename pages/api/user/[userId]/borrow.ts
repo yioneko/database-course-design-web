@@ -15,6 +15,7 @@ async function get(
   return res.status(200).json({
     transactions: transactions.map((transaction) => ({
       isbn: transaction.copy.book.id,
+      copyId: transaction.copy.id,
       title: transaction.copy.book.title,
       author: transaction.copy.book.authors.join(AUTHOR_SEPARATOR),
       userId: transaction.user.id,

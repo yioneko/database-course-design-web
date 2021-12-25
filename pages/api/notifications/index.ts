@@ -20,7 +20,6 @@ async function get(
   return res.status(200).json({
     notifications: notifications.map((notification) => ({
       id: notification.id,
-      sender: "admin", //? the database does not care the sender of the message
       receiver: notification.user.id,
       date: notification.sentTime.toString(),
       message: notification.message,

@@ -7,7 +7,7 @@ async function post(
   req: NextApiRequest,
   res: NextApiResponse<BookBorrowResponse>
 ) {
-  const { userId, isbn: copyId } = req.body as BookBorrowRequest; //? should have copy ID instead of ISBN
+  const { userId, copyId } = req.body as BookBorrowRequest;
   const user = await User.selectById(userId);
   if (user === null) return res.status(404).json({ error: message.userNF });
   const copy = await Copy.selectById(copyId);

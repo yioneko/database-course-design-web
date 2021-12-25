@@ -7,14 +7,12 @@ async function post(
   req: NextApiRequest,
   res: NextApiResponse<BookReturnResponse>
 ) {
-  const { userId, isbn: copyId } = req.body as BookReturnRequest; //? should have copy ID instead of ISBN
-  const user = await User.selectById(userId);
-  if (user === null) return res.status(404).json({ error: message.userNF });
+  const { copyId } = req.body as BookReturnRequest;
   const copy = await Copy.selectById(copyId);
   if (copy === null) return res.status(404).json({ error: message.copyNF });
   const transactions = await Transaction.select(
-    "`user_id`=? AND `copy_id`=? AND `returnTime` IS NULL",
-    [user.id, copy.id]
+    "`copy_id`=? AND `returnTime` IS NULL",
+    [copy.id]
   );
   if (transactions.length === 0)
     return res.status(404).json({ error: message.bookNotBorrowed });
