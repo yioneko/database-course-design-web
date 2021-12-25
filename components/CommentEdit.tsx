@@ -1,10 +1,14 @@
 import { Button, Form, Input, message as antdMessage } from "antd";
 import axios from "axios";
+import format from "date-fns/format";
 import { useContext } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { BookInfoSuccessResponse } from "../common/interface";
-import UserCtx from "../providers/user";
+import {
+  BookInfoSuccessResponse,
+  CommentAddRequest,
+} from "../common/interface";
 import message from "../common/message.json";
+import UserCtx from "../providers/user";
 
 export async function getBookInfo(isbn: string, userId?: string) {
   const response = await axios.get<BookInfoSuccessResponse>(
@@ -26,8 +30,8 @@ function CommentEdit({ isbn }: { isbn: string }) {
 
   const queryClient = useQueryClient();
   const mutation = useMutation(
-    (comment: string) =>
-      axios.post(`/api/books/${isbn}/comments`, { userId, comment }),
+    (data: CommentAddRequest) =>
+      axios.post(`/api/books/${isbn}/comments`, data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["comments", isbn]);
@@ -39,9 +43,18 @@ function CommentEdit({ isbn }: { isbn: string }) {
   const allowComment = !!data?.borrowed;
 
   return (
-    <Form
+    <Form<{ comment: string }>
       onFinish={({ comment }) => {
-        mutation.mutate(comment);
+        // TODO: Remove userId once token support is added
+        if (userId === undefined) {
+          antdMessage.error(message.mustLogin);
+          return;
+        }
+        mutation.mutate({
+          userId,
+          comment,
+          date: format(new Date(), "yyyy-MM-dd"),
+        });
       }}
     >
       <Form.Item>
