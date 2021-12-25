@@ -44,8 +44,8 @@ pnpm dev # start development server
   - [x] `GET  /api/user`
   - [x] `POST /api/login`
 - Book
-  - [ ] `GET  /api/books/:isbn/comments`
-  - [ ] `POST /api/books/:isbn/comments`
+  - [x] `GET  /api/books/:isbn/comments`
+  - [x] `POST /api/books/:isbn/comments`
   - [x] `GET  /api/books/:isbn/info`
   - [x] `GET  /api/books`
   - [x] `POST /api/books`
