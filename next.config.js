@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const withTM = require("next-transpile-modules")([
+  "database-course-design-model",
+]);
+module.exports = withTM({
   reactStrictMode: true,
   env: {
     MYSQL_HOST: "",
@@ -9,4 +12,4 @@ module.exports = {
     SALT_LENGTH: 16,
     HASH_ALGORITHM: "sha512",
   },
-};
+});
