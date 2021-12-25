@@ -46,9 +46,9 @@ pnpm dev # start development server
 - Book
   - [ ] `GET  /api/books/:isbn/comments`
   - [ ] `POST /api/books/:isbn/comments`
-  - [ ] `GET  /api/books/:isbn/info`
-  - [ ] `GET  /api/books`
-  - [ ] `POST /api/books`
+  - [x] `GET  /api/books/:isbn/info`
+  - [x] `GET  /api/books`
+  - [x] `POST /api/books`
 - Transaction
   - [x] `GET  /api/transactions`
   - [x] `POST /api/borrow`
