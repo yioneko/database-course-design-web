@@ -25,6 +25,7 @@ async function get(
     offset,
   });
   const bookCount = await Book.count(conditions, parameters);
+  console.log("books:\n", books);
   return res.status(200).json({
     books: books.map((book) => ({
       isbn: book.id,
@@ -53,10 +54,12 @@ async function post(
   return res.status(204).end(); //! HTTP 200 OK -> HTTP 204 No Content
 }
 
-export default async function handler(
+export default function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log("request:\n", req);
+  console.log("response:\n", res);
   try {
     if (req.method === "GET") return get(req, res);
     if (req.method === "POST") return post(req, res);
