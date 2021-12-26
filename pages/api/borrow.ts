@@ -13,14 +13,14 @@ async function post(
   const copy = await Copy.selectById(copyId);
   if (copy === null) return res.status(404).json({ error: message.copyNF });
   const transactionCount = await Transaction.count(
-    "`copy_id`=? AND `returnTime` IS NULL",
+    "`copy_id`=? AND `returnDate` IS NULL",
     [copy.id]
   );
   if (transactionCount > 0)
     return res.status(400).json({ error: message.bookNotAvailable });
   const transaction = new Transaction(user, copy);
   await transaction.insert();
-  return res.status(200).json({ dueDate: transaction.dueDate.toString() });
+  return res.status(200).json({ dueDate: transaction.dueDate.toDateString() });
 }
 
 export default async function handler(

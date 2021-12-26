@@ -11,13 +11,13 @@ async function post(
   const copy = await Copy.selectById(copyId);
   if (copy === null) return res.status(404).json({ error: message.copyNF });
   const transactions = await Transaction.select(
-    "`copy_id`=? AND `returnTime` IS NULL",
+    "`copy_id`=? AND `returnDate` IS NULL",
     [copy.id]
   );
   if (transactions.length === 0)
     return res.status(404).json({ error: message.bookNotBorrowed });
   const transaction = transactions[0];
-  transaction.returnTime = new Date();
+  transaction.returnDate = new Date();
   await transaction.update();
   return res.status(204).end(); //! HTTP 200 OK -> HTTP 204 No Content
 }
