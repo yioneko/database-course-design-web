@@ -8,7 +8,6 @@ const Home: NextPage = () => {
       <Head>
         <title>SCUT Library</title>
         <meta name="description" content="Demo library system for SCUT" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <BookList />

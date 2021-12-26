@@ -54,7 +54,6 @@ const CommentPage: NextPage = () => {
       <Head>
         <title>Comments - {data.title}</title>
         <meta name="description" content={`Comments of ${data.title}`} />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Row className="mx-auto max-w-screen-xl mt-4">
         <Col span={8}>

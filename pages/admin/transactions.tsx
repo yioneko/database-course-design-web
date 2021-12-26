@@ -1,6 +1,7 @@
 import { Table } from "antd";
 import axios from "axios";
 import { NextPage } from "next";
+import Head from "next/head";
 import { useQuery } from "react-query";
 import { TransactionListSuccessResponse } from "../../common/interface";
 import { AdminLayout } from "../../components/Layout";
@@ -24,6 +25,10 @@ const TransactionsAdmin: NextPage = () => {
 
   return (
     <AdminLayout>
+      <Head>
+        <title>Transactions administration</title>
+        <meta name="description" content="Administration page of books" />
+      </Head>
       <Table
         dataSource={data?.transactions}
         pagination={paginationConfig(data?.total)}

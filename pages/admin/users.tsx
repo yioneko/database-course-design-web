@@ -9,6 +9,7 @@ import {
 } from "antd";
 import axios from "axios";
 import { NextPage } from "next";
+import Head from "next/head";
 import { useContext } from "react";
 import { useMutation, useQuery } from "react-query";
 import {
@@ -99,6 +100,10 @@ const UsersAdmin: NextPage = () => {
 
   return (
     <AdminLayout>
+      <Head>
+        <title>Users administration</title>
+        <meta name="description" content="Administration page of users" />
+      </Head>
       <Table
         dataSource={data?.users}
         pagination={paginationConfig(data?.total)}

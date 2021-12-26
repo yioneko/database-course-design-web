@@ -76,7 +76,6 @@ function BookList() {
         itemLayout="horizontal"
         // NOTE: potential performance issue
         dataSource={data?.pages.flatMap((page) => page.books)}
-        loading={isFetching}
         loadMore={
           <div className="flex justify-center">
             <Button

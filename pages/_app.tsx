@@ -1,11 +1,13 @@
 import { ConfigProvider, Layout, message } from "antd";
 import "antd/dist/antd.variable.min.css";
+import axios from "axios";
 import { NextPageContext } from "next";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import Header from "../components/Header";
-import UserCtx, { UserInfo, useUserCtxProvider } from "../providers/user";
+import UserCtx, { useUserCtxProvider } from "../providers/user";
 import "../styles/globals.css";
 import handleQueryError from "../utils/handleQueryError";
 import verifyToken from "../utils/verifyToken";
@@ -16,9 +18,9 @@ if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
   worker.start();
 }
 */
+axios.defaults.baseURL = process.env.HOST;
 
 const { Content } = Layout;
-
 function MyApp({ Component, pageProps }: AppProps) {
   const userCtx = useUserCtxProvider(pageProps.user);
   const [queryClient] = useState(
@@ -49,6 +51,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ConfigProvider>
           <UserCtx.Provider value={userCtx}>
             <Layout className="min-h-screen">
+              <Head>
+                <link rel="icon" href="/favicon.ico" />
+              </Head>
               <Header />
               <Content className="pt-4">
                 <Component {...pageProps} />

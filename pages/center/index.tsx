@@ -1,5 +1,6 @@
 import { Descriptions } from "antd";
 import { NextPage } from "next";
+import Head from "next/head";
 import { useContext } from "react";
 import { CenterLayout } from "../../components/Layout";
 import NameEdit from "../../components/NameEdit";
@@ -19,6 +20,10 @@ const Profile: NextPage = () => {
   return (
     <CenterLayout>
       <div className="bg-white flex flex-col items-center">
+        <Head>
+          <title>User center - profile</title>
+          <meta name="description" content="Profile page of user" />
+        </Head>
         <UserAvatar isAdmin={isAdmin} size="large" className="mt-4 mb-6" />
         <Descriptions
           column={1}

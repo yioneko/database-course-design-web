@@ -1,6 +1,7 @@
 import { Button, message as antdMessage, Modal, Table, Typography } from "antd";
 import axios from "axios";
 import { NextPage } from "next";
+import Head from "next/head";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { useQuery } from "react-query";
@@ -13,7 +14,7 @@ import { CenterLayout } from "../../components/Layout";
 import PayFine from "../../components/PayFine";
 import UserCtx from "../../providers/user";
 
-function PayFineAction() {
+function PayFineAction({ disabled = false }: { disabled?: boolean }) {
   const [popup, setPopup] = useState(false);
 
   const onFinish = () => {
@@ -36,6 +37,7 @@ function PayFineAction() {
       </Modal>
       <Button
         type="primary"
+        disabled={disabled}
         onClick={() => {
           setPopup(true);
         }}
@@ -57,6 +59,10 @@ const Borrowed: NextPage = () => {
 
   return (
     <CenterLayout>
+      <Head>
+        <title>User center - borrow list</title>
+        <meta name="description" content="List of books borrowed by user" />
+      </Head>
       <Table<TransactionInfo>
         loading={isFetching}
         dataSource={data?.transactions}
@@ -83,7 +89,7 @@ const Borrowed: NextPage = () => {
                 >
                   {totalFine}
                 </Typography.Text>{" "}
-                <PayFineAction />
+                <PayFineAction disabled={totalFine === 0} />
               </Table.Summary.Cell>
             </Table.Summary.Row>
           );

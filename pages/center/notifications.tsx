@@ -2,6 +2,7 @@ import { CheckSquareOutlined } from "@ant-design/icons";
 import { Button, List, Typography } from "antd";
 import axios from "axios";
 import { NextPage } from "next";
+import Head from "next/head";
 import { useContext } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
@@ -37,6 +38,10 @@ const Notifications: NextPage = () => {
 
   return (
     <CenterLayout>
+      <Head>
+        <title>User center - notifications</title>
+        <meta name="description" content="Notifications of user" />
+      </Head>
       <List
         itemLayout="vertical"
         dataSource={data}

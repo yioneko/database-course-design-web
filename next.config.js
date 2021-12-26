@@ -12,5 +12,6 @@ module.exports = withTM({
     SALT_LENGTH: 16,
     HASH_ALGORITHM: "sha512",
     JWT_SECRET: "",
+    HOST: "http://localhost:3000",
   },
 });

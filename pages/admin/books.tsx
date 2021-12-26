@@ -12,6 +12,7 @@ import {
 } from "antd";
 import axios from "axios";
 import { NextPage } from "next";
+import Head from "next/head";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
@@ -183,6 +184,10 @@ const BooksAdmin: NextPage = () => {
 
   return (
     <AdminLayout>
+      <Head>
+        <title>Books administration</title>
+        <meta name="description" content="Administration page of books" />
+      </Head>
       <Modal
         title={message.addBook}
         visible={openAdd}
