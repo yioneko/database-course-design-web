@@ -1,5 +1,5 @@
-import { createContext, useReducer } from "react";
 import { NextRouter } from "next/router";
+import { createContext, useReducer } from "react";
 
 export interface UserInfo {
   userId: string | undefined;
@@ -38,10 +38,11 @@ function reducer(state: UserInfo, action: ReducerAction) {
   }
 }
 
-export function useUserCtxProvider() {
+export function useUserCtxProvider(initialUser?: UserInfo) {
+  const { userId = undefined, isAdmin = false } = initialUser || {};
   const [state, dispatch] = useReducer(reducer, {
-    userId: undefined,
-    isAdmin: false,
+    userId: userId,
+    isAdmin: isAdmin,
   });
   return {
     ...state,

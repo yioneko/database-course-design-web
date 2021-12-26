@@ -45,21 +45,14 @@ function CommentEdit({ isbn }: { isbn: string }) {
   return (
     <Form<{ comment: string }>
       onFinish={({ comment }) => {
-        // TODO: Remove userId once token support is added
-        if (userId === undefined) {
-          antdMessage.error(message.mustLogin);
-          return;
-        }
         mutation.mutate({
-          userId,
           comment,
           date: format(new Date(), "yyyy-MM-dd"),
         });
       }}
     >
-      <Form.Item>
+      <Form.Item name="comment">
         <Input.TextArea
-          name="comment"
           placeholder={
             allowComment ? message.writeComment : message.disallowComment
           }

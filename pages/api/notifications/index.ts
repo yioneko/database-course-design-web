@@ -6,14 +6,15 @@ import type {
 } from "../../../common/interface";
 import { User, Notification } from "database-course-design-model";
 import message from "../../../common/message.json";
+import verifyToken from "../../../utils/verifyToken";
 
 async function get(
   req: NextApiRequest,
   res: NextApiResponse<NotificationResponse>
 ) {
-  const { userId } = req.query as { userId?: string }; //? suggest using token to extract the user ID
+  const { userId } = verifyToken(req.cookies.token);
   if (userId === undefined)
-    return res.status(404).json({ error: message.userNF });
+    return res.status(404).json({ error: message.invalidToken });
   const user = await User.selectById(userId);
   if (user === null) return res.status(404).json({ error: message.userNF });
   const notifications = await Notification.select("`user_id`=?", [user.id]);

@@ -6,8 +6,8 @@ import {
   CommentAddResponse,
 } from "../../../../common/interface";
 import { User, Book, Comment } from "database-course-design-model";
-import { AUTHOR_SEPARATOR } from "../../../../common/constants";
 import message from "../../../../common/message.json";
+import verifyToken from "../../../../utils/verifyToken";
 
 async function get(
   req: NextApiRequest,
@@ -37,12 +37,15 @@ async function post(
   res: NextApiResponse<CommentAddResponse>
 ) {
   //! comment adding is implemented
-  const { isbn } = req.query as { isbn: string };
-  const { userId, comment: content, date } = req.body as CommentAddRequest;
+  const { userId } = verifyToken(req.cookies.token);
+  if (userId === undefined)
+    return res.status(404).json({ error: message.invalidToken });
   const user = await User.selectById(userId);
   if (user === null) return res.status(404).json({ error: message.userNF });
+  const { isbn } = req.query as { isbn: string };
   const book = await Book.selectById(isbn);
   if (book === null) return res.status(404).json({ error: message.bookNF });
+  const { comment: content, date } = req.body as CommentAddRequest;
   const comment = new Comment(user, book, content, new Date(date));
   await comment.insert();
   return res.status(204).end(); //! HTTP 200 OK -> HTTP 204 No Content

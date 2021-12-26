@@ -34,6 +34,7 @@
   "pwdReset": "Password reset successfully",
 
   "methodNotAllowed": "The HTTP Method of the request is not allowed",
+  "invalidToken": "The authentication token is invalid",
 
   "notified": "Notification sent",
   "notifyAction": "Notify",
