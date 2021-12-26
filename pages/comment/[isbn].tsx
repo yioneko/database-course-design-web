@@ -1,16 +1,17 @@
+import { Col, Descriptions, Divider, Row, Typography } from "antd";
 import { GetServerSideProps, NextPage } from "next";
-import { useRouter } from "next/router";
+import Error from "next/error";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useContext } from "react";
 import { dehydrate, QueryClient, useQuery } from "react-query";
+import CommentEdit, { getBookInfo } from "../../components/CommentEdit";
 import CommentList, {
   getComments,
   initialPaginationParams,
 } from "../../components/CommentList";
-import CommentEdit, { getBookInfo } from "../../components/CommentEdit";
-import { useContext } from "react";
 import UserCtx from "../../providers/user";
-import Error from "next/error";
-import { Col, Descriptions, Divider, Row, Typography } from "antd";
+import verifyToken from "../../utils/verifyToken";
 
 export const getServerSideProps: GetServerSideProps<
   { [key: string]: any },
@@ -22,7 +23,12 @@ export const getServerSideProps: GetServerSideProps<
   await queryClient.prefetchQuery(["comments", isbn], () =>
     getComments(isbn, initialPaginationParams)
   );
-  await queryClient.prefetchQuery(["bookInfo", isbn], () => getBookInfo(isbn));
+
+  const { userId } = verifyToken(context.req.cookies.token);
+
+  await queryClient.prefetchQuery(["bookInfo", isbn, userId], () =>
+    getBookInfo(isbn, userId)
+  );
 
   return {
     props: {

@@ -3,6 +3,7 @@ import { LoginRequest, LoginResponse } from "../../common/interface";
 import { User } from "database-course-design-model";
 import message from "../../common/message.json";
 import jwt from "jsonwebtoken";
+import { UserInfo } from "../../providers/user";
 
 async function post(req: NextApiRequest, res: NextApiResponse<LoginResponse>) {
   const { userId, password } = req.body as LoginRequest;
@@ -11,13 +12,13 @@ async function post(req: NextApiRequest, res: NextApiResponse<LoginResponse>) {
     return res.status(401).json({ error: message.wrongNameOrPwd });
   else {
     const token = jwt.sign(
-      { userId: user.id },
+      { userId: user.id, isAdmin: user.isAdministrator } as UserInfo,
       process.env.JWT_SECRET as string,
       { expiresIn: "2h" }
     );
     return res
       .status(200)
-      .setHeader("Set-Cookie", `token=${token}`)
+      .setHeader("Set-Cookie", `token=${token}; Path=/`) // The path is needed (otherwise it will be /api)
       .json({ isAdmin: user.isAdministrator });
   }
 }

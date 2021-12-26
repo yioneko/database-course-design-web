@@ -3,18 +3,7 @@ import { BookInfoResponse } from "../../../../common/interface";
 import { Book, Transaction } from "database-course-design-model";
 import { AUTHOR_SEPARATOR } from "../../../../common/constants";
 import message from "../../../../common/message.json";
-import jwt from "jsonwebtoken";
-
-function verifyToken(token: string) {
-  try {
-    return jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as jwt.JwtPayload;
-  } catch {
-    return {};
-  }
-}
+import verifyToken from "../../../../utils/verifyToken";
 
 async function get(
   req: NextApiRequest,
@@ -28,7 +17,7 @@ async function get(
     author: book.authors.join(AUTHOR_SEPARATOR),
     available: NaN, //? The usage of the field should be changed since the borrow is copy-based
   };
-  const { userId } = verifyToken(req.cookies.token) as { userId?: string };
+  const { userId } = verifyToken(req.cookies.token);
   if (userId !== undefined) {
     const transactionCount = await Transaction.count(
       "`user_id`=? AND `copy_book_id`=?",

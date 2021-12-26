@@ -7,18 +7,7 @@ import {
 } from "../../../../common/interface";
 import { User, Book, Comment } from "database-course-design-model";
 import message from "../../../../common/message.json";
-import jwt from "jsonwebtoken";
-
-function verifyToken(token: string) {
-  try {
-    return jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as jwt.JwtPayload;
-  } catch {
-    return {};
-  }
-}
+import verifyToken from "../../../../utils/verifyToken";
 
 async function get(
   req: NextApiRequest,
@@ -48,7 +37,7 @@ async function post(
   res: NextApiResponse<CommentAddResponse>
 ) {
   //! comment adding is implemented
-  const { userId } = verifyToken(req.cookies.token) as { userId?: string };
+  const { userId } = verifyToken(req.cookies.token);
   if (userId === undefined)
     return res.status(404).json({ error: message.invalidToken });
   const user = await User.selectById(userId);
