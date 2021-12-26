@@ -17,7 +17,7 @@ async function get(
     PaginationBaseRequest & { filter: string }
   >;
   const conditions = filter
-    ? "MATCH(`title`, `authors`) AGAINST (?)"
+    ? "MATCH(`title`, `authors`) AGAINST (? IN BOOLEAN MODE)"
     : undefined;
   const parameters = filter ? [filter] : undefined;
   const books = await Book.select(conditions, parameters, {
