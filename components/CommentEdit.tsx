@@ -51,9 +51,8 @@ function CommentEdit({ isbn }: { isbn: string }) {
         });
       }}
     >
-      <Form.Item>
+      <Form.Item name="comment">
         <Input.TextArea
-          name="comment"
           placeholder={
             allowComment ? message.writeComment : message.disallowComment
           }
