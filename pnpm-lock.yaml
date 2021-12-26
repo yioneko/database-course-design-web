@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@ant-design/icons': ^4.7.0
   '@babel/core': ^7.16.0
+  '@logtail/node': ^0.1.10
   '@testing-library/jest-dom': ^5.15.0
   '@testing-library/react': ^12.1.2
   '@types/jsonwebtoken': ^8.5.6
@@ -34,9 +35,10 @@ specifiers:
 
 dependencies:
   '@ant-design/icons': 4.7.0_react-dom@17.0.2+react@17.0.2
+  '@logtail/node': 0.1.10
   antd: 4.17.1_react-dom@17.0.2+react@17.0.2
   axios: 0.24.0
-  database-course-design-model: github.com/zsz12251665/database-course-design-model/a7f95307b77b45377482d7bd0b1a5914cf0f402d
+  database-course-design-model: github.com/zsz12251665/database-course-design-model/083a868e2cc75042d1183951c6e270f7ca35459d
   date-fns: 2.26.0
   jsonwebtoken: 8.5.1
   next: 12.0.4_aae888dfa296766acacf1a733aa50b3a
@@ -749,6 +751,42 @@ packages:
       chalk: 4.1.2
     dev: true
 
+  /@logtail/core/0.1.10:
+    resolution: {integrity: sha512-76q951W7EoaF7SwAZbLsnAjD0QUXNHHGXnsBu/tGHd5UT50jlyxI0t27Lev9IQiF08NFy9SlBE1V26RAeMDccQ==}
+    dependencies:
+      '@logtail/tools': 0.1.8
+      '@logtail/types': 0.1.8
+    dev: false
+
+  /@logtail/node/0.1.10:
+    resolution: {integrity: sha512-zJgKm593NkMMI3QJBCR1ry6pS/2YKINO9cNZWBDEOeG06L2vVFn/BdK/Uxuypyi9LtQ9kc5lZSbFPBi91NiHlg==}
+    dependencies:
+      '@logtail/core': 0.1.10
+      '@logtail/types': 0.1.8
+      '@msgpack/msgpack': 2.7.1
+      '@types/stack-trace': 0.0.29
+      cross-fetch: 3.1.4
+      minimatch: 3.0.4
+      stack-trace: 0.0.10
+    dev: false
+
+  /@logtail/tools/0.1.8:
+    resolution: {integrity: sha512-Q2lQBrTRzLCFYJXxhQFfigSpU5Vanhi/EAwOULfNZQn4vV68PKKfqTWK3IRSqOVJ4YpjPusu+BpNGasZfyWACQ==}
+    dependencies:
+      '@logtail/types': 0.1.8
+    dev: false
+
+  /@logtail/types/0.1.8:
+    resolution: {integrity: sha512-2XsXMGLK675kkJ+Pq0RE4c0hGFUr7hP4kt2/GTf/5FTzKre3VE0M9yRIXubpsQq4pIrnMgzVnH42A+z92QwL/A==}
+    dependencies:
+      js: 0.1.0
+    dev: false
+
+  /@msgpack/msgpack/2.7.1:
+    resolution: {integrity: sha512-ApwiSL2c9ObewdOE/sqt788P1C5lomBOHyO8nUBCr4ofErBCnYQ003NtJ8lS9OQZc11ximkbmgAZJjB8y6cCdA==}
+    engines: {node: '>= 10'}
+    dev: false
+
   /@mswjs/cookies/0.1.6:
     resolution: {integrity: sha512-A53XD5TOfwhpqAmwKdPtg1dva5wrng2gH5xMvklzbd9WLTSVU953eCRa8rtrrm6G7Cy60BOGsBRN89YQK0mlKA==}
     dependencies:
@@ -1140,6 +1178,10 @@ packages:
     dependencies:
       '@types/node': 16.11.9
     dev: true
+
+  /@types/stack-trace/0.0.29:
+    resolution: {integrity: sha512-TgfOX+mGY/NyNxJLIbDWrO9DjGoVSW9+aB8H2yy1fy32jsvxijhmyJI9fDFgvz3YP4lvJaq9DzdR/M1bOgVc9g==}
+    dev: false
 
   /@types/stack-utils/2.0.1:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
@@ -2042,6 +2084,13 @@ packages:
       delayed-stream: 1.0.0
     dev: true
 
+  /commander/1.1.1:
+    resolution: {integrity: sha1-UNFlGGiuYOzP8KLZ80WVN2vGsEE=}
+    engines: {node: '>= 0.6.x'}
+    dependencies:
+      keypress: 0.1.0
+    dev: false
+
   /commander/6.2.1:
     resolution: {integrity: sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==}
     engines: {node: '>= 6'}
@@ -2129,6 +2178,12 @@ packages:
       ripemd160: 2.0.2
       safe-buffer: 5.2.1
       sha.js: 2.4.11
+    dev: false
+
+  /cross-fetch/3.1.4:
+    resolution: {integrity: sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ==}
+    dependencies:
+      node-fetch: 2.6.1
     dev: false
 
   /cross-spawn/7.0.3:
@@ -4119,6 +4174,13 @@ packages:
       esprima: 4.0.1
     dev: true
 
+  /js/0.1.0:
+    resolution: {integrity: sha1-4dCv1V6jnCso2jBOgUPq8sEz82Y=}
+    hasBin: true
+    dependencies:
+      commander: 1.1.1
+    dev: false
+
   /jsdom/16.7.0:
     resolution: {integrity: sha512-u9Smc2G1USStM+s/x1ru5Sxrl6mPYCbByG1U/hUmqaVsm4tbNyS7CicOSRyuGQYZhTu0h84qkZZQ/I+dzizSVw==}
     engines: {node: '>=10'}
@@ -4248,6 +4310,10 @@ packages:
     dependencies:
       jwa: 1.4.1
       safe-buffer: 5.2.1
+    dev: false
+
+  /keypress/0.1.0:
+    resolution: {integrity: sha1-SjGI1CkbZrT2XtuZ+AaqmuKTWSo=}
     dev: false
 
   /kleur/3.0.3:
@@ -6171,6 +6237,10 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
+  /stack-trace/0.0.10:
+    resolution: {integrity: sha1-VHxws0fo0ytOEI6hoqFZ5f3eGcA=}
+    dev: false
+
   /stack-utils/2.0.5:
     resolution: {integrity: sha512-xrQcmYhOsn/1kX+Vraq+7j4oE2j/6BFscZ0etmYg81xuM8Gq0022Pxb8+IqgOFUIaxHs0KaSb7T1+OegiNrNFA==}
     engines: {node: '>=10'}
@@ -6946,8 +7016,8 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  github.com/zsz12251665/database-course-design-model/a7f95307b77b45377482d7bd0b1a5914cf0f402d:
-    resolution: {tarball: https://codeload.github.com/zsz12251665/database-course-design-model/tar.gz/a7f95307b77b45377482d7bd0b1a5914cf0f402d}
+  github.com/zsz12251665/database-course-design-model/083a868e2cc75042d1183951c6e270f7ca35459d:
+    resolution: {tarball: https://codeload.github.com/zsz12251665/database-course-design-model/tar.gz/083a868e2cc75042d1183951c6e270f7ca35459d}
     name: database-course-design-model
     version: 0.0.0
     dependencies:

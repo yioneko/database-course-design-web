@@ -1,13 +1,16 @@
+import { Logtail } from "@logtail/node";
+import { Book, Copy } from "database-course-design-model";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { AUTHOR_SEPARATOR } from "../../../common/constants";
 import {
-  PaginationBaseRequest,
-  BookListResponse,
   BookAddRequest,
   BookAddResponse,
+  BookListResponse,
+  PaginationBaseRequest,
 } from "../../../common/interface";
-import { Book, Copy } from "database-course-design-model";
-import { AUTHOR_SEPARATOR } from "../../../common/constants";
 import message from "../../../common/message.json";
+
+const logger = new Logtail(process.env.LOGTAIL_SOURCE_TOKEN || "");
 
 async function get(
   req: NextApiRequest,
@@ -54,12 +57,11 @@ async function post(
   return res.status(204).end(); //! HTTP 200 OK -> HTTP 204 No Content
 }
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log("request:\n", req);
-  console.log("response:\n", res);
+  await logger.info("Request", { body: req.body, query: req.query as any });
   try {
     if (req.method === "GET") return get(req, res);
     if (req.method === "POST") return post(req, res);
