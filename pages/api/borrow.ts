@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { BookBorrowRequest, BookBorrowResponse } from "../../common/interface";
 import { Copy, User, Transaction } from "database-course-design-model";
 import message from "../../common/message.json";
+import formatDate from "../../utils/formatDate";
 
 async function post(
   req: NextApiRequest,
@@ -20,7 +21,7 @@ async function post(
     return res.status(400).json({ error: message.bookNotAvailable });
   const transaction = new Transaction(user, copy);
   await transaction.insert();
-  return res.status(200).json({ dueDate: transaction.dueDate.toDateString() });
+  return res.status(200).json({ dueDate: formatDate(transaction.dueDate) });
 }
 
 export default async function handler(

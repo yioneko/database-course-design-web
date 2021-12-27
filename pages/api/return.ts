@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { BookReturnRequest, BookReturnResponse } from "../../common/interface";
-import { Copy, User, Transaction } from "database-course-design-model";
+import { Copy, Transaction } from "database-course-design-model";
 import message from "../../common/message.json";
 
 async function post(

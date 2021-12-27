@@ -24,13 +24,14 @@ async function get(
     limit: pageLimit,
     offset,
   });
+
   const bookCount = await Book.count(conditions, parameters);
   return res.status(200).json({
     books: books.map((book) => ({
       isbn: book.id,
       title: book.title,
       author: book.authors.join(AUTHOR_SEPARATOR),
-      available: NaN, //? The usage of the field should be changed since the borrow is copy-based
+      available: book.available,
     })),
     total: bookCount,
   });
@@ -45,7 +46,8 @@ async function post(
   if (book === null) {
     if (title === undefined || author === undefined)
       return res.status(400).json({ error: message.requireTitleAndAuthor });
-    book = new Book(isbn, title, author.split(AUTHOR_SEPARATOR));
+    // FIXME: I don't know how to fix the available field...
+    book = new Book(isbn, title, author.split(AUTHOR_SEPARATOR), 0);
     await book.insert();
   }
   const copy = new Copy(book);

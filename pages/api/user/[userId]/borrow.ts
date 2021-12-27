@@ -1,8 +1,9 @@
+import { Transaction, User } from "database-course-design-model";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { UserBorrowInfoResponse } from "../../../../common/interface";
-import { User, Transaction } from "database-course-design-model";
 import { AUTHOR_SEPARATOR } from "../../../../common/constants";
+import type { UserBorrowInfoResponse } from "../../../../common/interface";
 import message from "../../../../common/message.json";
+import formatDate from "../../../../utils/formatDate";
 
 async function get(
   req: NextApiRequest,
@@ -19,12 +20,12 @@ async function get(
       title: transaction.copy.book.title,
       author: transaction.copy.book.authors.join(AUTHOR_SEPARATOR),
       userId: transaction.user.id,
-      date: transaction.borrowDate.toDateString(),
-      dueDate: transaction.dueDate.toDateString(),
+      date: formatDate(transaction.borrowDate),
+      dueDate: formatDate(transaction.dueDate),
       returnDate:
         transaction.returnDate === null
           ? undefined
-          : transaction.returnDate.toDateString(),
+          : formatDate(transaction.returnDate),
       fine: isNaN(transaction.fine) ? 0 : transaction.fine,
     })),
   });
