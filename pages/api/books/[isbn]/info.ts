@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { BookInfoResponse } from "../../../../common/interface";
 import { Book, Transaction } from "database-course-design-model";
 import { AUTHOR_SEPARATOR } from "../../../../common/constants";

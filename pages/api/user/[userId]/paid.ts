@@ -1,5 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import type { FinePaidCheckResponse } from "../../../../common/interface";
+import { NextApiRequest, NextApiResponse } from "next";
+import { FinePaidCheckResponse } from "../../../../common/interface";
 import { User, Transaction } from "database-course-design-model";
 import message from "../../../../common/message.json";
 

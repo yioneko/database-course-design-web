@@ -1,5 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import type {
+import { NextApiRequest, NextApiResponse } from "next";
+import {
   UserListResponse,
   PaginationBaseRequest,
 } from "../../../common/interface";

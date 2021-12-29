@@ -1,7 +1,7 @@
 import { Transaction, User } from "database-course-design-model";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { AUTHOR_SEPARATOR } from "../../../../common/constants";
-import type { UserBorrowInfoResponse } from "../../../../common/interface";
+import { UserBorrowInfoResponse } from "../../../../common/interface";
 import message from "../../../../common/message.json";
 import formatDate from "../../../../utils/formatDate";
 

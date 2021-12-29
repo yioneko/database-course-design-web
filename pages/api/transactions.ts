@@ -1,5 +1,5 @@
 import { Transaction } from "database-course-design-model";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { AUTHOR_SEPARATOR } from "../../common/constants";
 import {
   PaginationBaseRequest,

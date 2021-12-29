@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { BookReturnRequest, BookReturnResponse } from "../../common/interface";
 import { Copy, Transaction } from "database-course-design-model";
 import message from "../../common/message.json";

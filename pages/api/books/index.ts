@@ -1,6 +1,5 @@
-import { Logtail } from "@logtail/node";
 import { Book, Copy } from "database-course-design-model";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { AUTHOR_SEPARATOR } from "../../../common/constants";
 import {
   BookAddRequest,
@@ -9,8 +8,6 @@ import {
   PaginationBaseRequest,
 } from "../../../common/interface";
 import message from "../../../common/message.json";
-
-const logger = new Logtail(process.env.LOGTAIL_SOURCE_TOKEN || "");
 
 async function get(
   req: NextApiRequest,
@@ -35,7 +32,7 @@ async function get(
       isbn: book.id,
       title: book.title,
       author: book.authors.join(AUTHOR_SEPARATOR),
-      available: book.available,
+      available: NaN,
     })),
     total: bookCount,
   });
@@ -50,8 +47,7 @@ async function post(
   if (book === null) {
     if (title === undefined || author === undefined)
       return res.status(400).json({ error: message.requireTitleAndAuthor });
-    // FIXME: I don't know how to fix the available field...
-    book = new Book(isbn, title, author.split(AUTHOR_SEPARATOR), 0);
+    book = new Book(isbn, title, author.split(AUTHOR_SEPARATOR));
     await book.insert();
   }
   const copy = new Copy(book);
@@ -63,7 +59,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await logger.info("Request", { body: req.body, query: req.query as any });
   try {
     if (req.method === "GET") return get(req, res);
     if (req.method === "POST") return post(req, res);

@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { NotificationReadResponse } from "../../../common/interface";
 import { Notification } from "database-course-design-model";
 import message from "../../../common/message.json";
