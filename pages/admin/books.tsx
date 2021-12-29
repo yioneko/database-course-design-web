@@ -75,7 +75,7 @@ function CopySelect({
   );
 
   return (
-    <Select loading={isFetching} {...props}>
+    <Select loading={isFetching} {...props} className="!w-40">
       {(copies || []).map((copy) => (
         <Select.Option key={copy} value={copy}>
           {copy}

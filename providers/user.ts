@@ -24,6 +24,8 @@ function reducer(state: UserInfo, action: ReducerAction) {
   switch (action.type) {
     case "logout":
       action.router.push("/");
+      document.cookie =
+        "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       return {
         userId: undefined,
         isAdmin: false,

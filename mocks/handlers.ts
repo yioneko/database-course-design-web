@@ -1,4 +1,4 @@
-import { addWeeks, format } from "date-fns";
+import { addWeeks } from "date-fns";
 import { rest, RestRequest } from "msw";
 import {
   BookAddRequest,
@@ -39,6 +39,7 @@ import {
   UserListResponse,
 } from "../common/interface";
 import message from "../common/message.json";
+import formatDate from "../utils/formatDate";
 import {
   books,
   comments,
@@ -121,7 +122,7 @@ export const handlers = [
         notifications.push({
           id: "" + notifications.length,
           receiver: maybeReceiver.name,
-          date: format(new Date(), "yyyy-MM-dd"),
+          date: formatDate(new Date()),
           message: notification.message,
           isRead: false,
         });
@@ -466,8 +467,8 @@ export const handlers = [
           userId,
           ...maybeBook,
           copyId,
-          date: format(new Date(), "yyyy-MM-dd"),
-          dueDate: format(addWeeks(new Date(), 3), "yyyy-MM-dd"),
+          date: formatDate(new Date()),
+          dueDate: formatDate(addWeeks(new Date(), 3)),
           fine: 0,
         });
         maybeBook.available -= 1;
@@ -505,7 +506,7 @@ export const handlers = [
           );
         } else {
           maybeBook.available += 1;
-          maybeTransaction.returnDate = format(new Date(), "yyyy-MM-dd");
+          maybeTransaction.returnDate = formatDate(new Date());
           return res(ctx.status(200));
         }
       }

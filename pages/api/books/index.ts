@@ -20,13 +20,14 @@ async function get(
     PaginationBaseRequest & { filter: string }
   >;
   const conditions = filter
-    ? "MATCH(`title`, `authors`) AGAINST (?)"
+    ? "MATCH(`title`, `authors`) AGAINST (? IN BOOLEAN MODE)"
     : undefined;
   const parameters = filter ? [filter] : undefined;
   const books = await Book.select(conditions, parameters, {
     limit: pageLimit,
     offset,
   });
+
   const bookCount = await Book.count(conditions, parameters);
   console.log("books:\n", books);
   return res.status(200).json({
@@ -34,7 +35,7 @@ async function get(
       isbn: book.id,
       title: book.title,
       author: book.authors.join(AUTHOR_SEPARATOR),
-      available: NaN, //? The usage of the field should be changed since the borrow is copy-based
+      available: book.available,
     })),
     total: bookCount,
   });
@@ -49,7 +50,8 @@ async function post(
   if (book === null) {
     if (title === undefined || author === undefined)
       return res.status(400).json({ error: message.requireTitleAndAuthor });
-    book = new Book(isbn, title, author.split(AUTHOR_SEPARATOR));
+    // FIXME: I don't know how to fix the available field...
+    book = new Book(isbn, title, author.split(AUTHOR_SEPARATOR), 0);
     await book.insert();
   }
   const copy = new Copy(book);
